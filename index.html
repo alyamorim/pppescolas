@@ -184,7 +184,112 @@
     font-size: 13px; font-weight: 600; opacity: 0; transition: opacity .3s;
     pointer-events: none; z-index: 999; white-space: nowrap; }
   .toast.show { opacity: 1; }
+
+  /* ── PRINT / PDF ── */
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    #topbar, .form-actions, .section-head .chevron,
+    #view-list, #view-stats { display: none !important; }
+    #view-form { display: block !important; padding: 0; }
+    .section { border: none; box-shadow: none; margin-bottom: 0; page-break-inside: avoid; }
+    .section-head { background: #1A3A5C; color: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 6pt 10pt; font-size: 10pt; }
+    .section-body { padding: 8pt 10pt; }
+    .section.collapsed .section-body { display: block !important; }
+    .pdf-school-header { display: block !important; }
+    .form-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .pdf-page-break { page-break-before: always; }
+    .pdf-section-title { font-size: 10pt; font-weight: bold; color: #1A3A5C; text-transform: uppercase;
+      border-bottom: 1.5pt solid #1A3A5C; margin: 10pt 0 6pt; padding-bottom: 2pt; }
+    .pdf-table { width: 100%; border-collapse: collapse; margin-bottom: 8pt; font-size: 9.5pt; }
+    .pdf-table th { background: #E8EFF7; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      border: 0.5pt solid #aaa; padding: 4pt 6pt; text-align: left; font-size: 9pt; }
+    .pdf-table td { border: 0.5pt solid #ccc; padding: 4pt 6pt; vertical-align: top; }
+    .pdf-table tr:nth-child(even) td { background: #F9F9F9; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .pdf-field { margin-bottom: 5pt; font-size: 9.5pt; }
+    .pdf-label { font-weight: bold; color: #444; font-size: 8.5pt; text-transform: uppercase; }
+    .pdf-val { margin-top: 1pt; }
+    .pdf-check { display: inline-block; margin-right: 10pt; font-size: 9pt; }
+    .pdf-check-yes { color: #2E7D47; font-weight: bold; }
+    .pdf-check-no  { color: #999; }
+    .pdf-obs { font-style: italic; color: #555; font-size: 9pt; margin-top: 2pt; }
+    .pdf-badge-done    { color: #2E7D47; font-weight: bold; }
+    .pdf-badge-partial { color: #B45A00; font-weight: bold; }
+    .pdf-badge-empty   { color: #999; }
+  }
+  .pdf-print-container { display: none; }
+  @media print { .pdf-print-container { display: block; } }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    #topbar, #view-list, #view-stats, .form-actions,
+    .btn-primary, .btn-back, .add-btn, .exists-toggle { display: none !important; }
+    #view-form { display: block !important; padding: 0; max-width: 100%; }
+    .section { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; margin-bottom: 10px; }
+    .section-body { display: block !important; }
+    .section-head { background: #eef2f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .form-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .amb-body { display: block !important; }
+    .amb-head { background: #f2f4f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .checklist { grid-template-columns: 1fr 1fr; }
+    textarea, input[type=text] { border: none; border-bottom: 1px solid #ccc; background: transparent; }
+    .day-header, #school-list { display: none !important; }
+    #print-view { display: block !important; }
+    @page { margin: 1.2cm 1.5cm; size: A4; }
+  }
+  #print-view { display: none; }
+
+  /* print view layout */
+  .pv-header { background: #1a3a5c; color: #fff; border-radius: 6px;
+    padding: 14px 18px; margin-bottom: 14px; }
+  .pv-header .pv-name { font-size: 17px; font-weight: 700; }
+  .pv-header .pv-sub  { font-size: 12px; opacity: .75; margin-top: 3px; }
+  .pv-section { border: 1px solid #ccc; border-radius: 6px;
+    margin-bottom: 10px; overflow: hidden; break-inside: avoid; }
+  .pv-section-title { background: #eef2f7; padding: 8px 14px;
+    font-size: 12px; font-weight: 700; color: #1a3a5c;
+    text-transform: uppercase; letter-spacing: .04em;
+    border-bottom: 1px solid #ccc; }
+  .pv-body { padding: 12px 14px; }
+  .pv-row { display: flex; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+  .pv-field { flex: 1; min-width: 160px; }
+  .pv-field label { display: block; font-size: 10px; font-weight: 700;
+    color: #6b6760; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; }
+  .pv-field .pv-val { font-size: 13px; border-bottom: 1px solid #ccc;
+    padding-bottom: 2px; min-height: 18px; word-break: break-word; }
+  .pv-field .pv-val.empty { color: #bbb; font-style: italic; }
+  .pv-note { font-size: 12px; margin-bottom: 8px; line-height: 1.5; }
+  .pv-amb-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .pv-amb-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
+    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
+  .pv-amb-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; }
+  .pv-amb-table tr:nth-child(even) td { background: #fafafa; }
+  .pv-exists-sim { color: #2e7d47; font-weight: 700; }
+  .pv-exists-nao { color: #c8460a; font-weight: 700; }
+  .pv-checks { display: flex; flex-wrap: wrap; gap: 3px 12px; }
+  .pv-check { font-size: 11px; white-space: nowrap; }
+  .pv-check.on  { color: #1a3a5c; font-weight: 600; }
+  .pv-check.off { color: #bbb; text-decoration: line-through; }
+  .pv-obra-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .pv-obra-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
+    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
+  .pv-obra-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; font-size: 12px; }
+  .pv-manif { font-size: 13px; line-height: 1.6; white-space: pre-wrap;
+    background: #fafafa; border: 1px solid #ddd; border-radius: 4px;
+    padding: 10px 12px; min-height: 40px; }
+  .pv-tag { display: inline-block; background: #e8eff7; color: #1a3a5c;
+    border-radius: 3px; padding: 1px 7px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+  .pv-btn { background: #1a3a5c; color: #fff; border: none; border-radius: 6px;
+    padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
+    font-family: var(--font); margin-right: 8px; margin-bottom: 6px; }
+  .pv-btn.sec { background: #fff; color: #1a3a5c; border: 1px solid #1a3a5c; }
+  .pv-print-bar { background: #fff; border-bottom: 1px solid #ddd;
+    padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap; position: sticky; top: 0; z-index: 50; }
+  .pv-print-bar span { font-size: 13px; color: #6b6760; flex: 1; }
+
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -203,11 +308,13 @@
 <div id="view-list" class="view active">
   <div id="school-list"></div>
   <div class="export-area" style="margin-top:16px;">
-    <button class="btn-export" onclick="exportData()">&#8659; Exportar dados (JSON)</button>
+    <button class="btn-export" onclick="exportExcel()">&#8659; Exportar planilha (.xlsx)</button>
     <label class="btn-import" style="cursor:pointer;">
-      &#8657; Importar dados
+      &#8657; Importar dados (JSON)
       <input type="file" accept=".json" style="display:none" onchange="importData(event)">
     </label>
+    <button class="btn-import" onclick="exportJSON()" style="border-color:var(--muted);color:var(--muted);">&#8659; Backup JSON</button>
+    <button class="btn-import" onclick="clearAllData()" style="border-color:#c0392b;color:#c0392b;">&#10005; Limpar todos os dados</button>
   </div>
 </div>
 
@@ -216,6 +323,9 @@
   <div id="form-content"></div>
 </div>
 
+
+<!-- PRINT VIEW -->
+<div id="print-view"></div>
 <!-- STATS VIEW -->
 <div id="view-stats" class="view">
   <div class="stats-title">Painel estatístico</div>
@@ -480,6 +590,7 @@ function renderForm(s, saved){
   // ── ACTIONS ──
   html += `<div class="form-actions">
     <button class="btn-back" onclick="showView('list')">&#8592; Escolas</button>
+    <button class="icon-btn" style="background:var(--accent);padding:12px 16px;font-size:14px;font-weight:700;" onclick="exportPDF('${s.id}')">&#8659; Exportar PDF</button>
     <button class="btn-primary" onclick="markDone('${s.id}')">&#10003; Marcar como concluído</button>
   </div>`;
 
@@ -620,14 +731,171 @@ function markDone(sid){
 }
 
 // ── EXPORT / IMPORT ───────────────────────────────────────────────────────────
-function exportData(){
+function exportJSON(){
   const data = loadAll();
   const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `ppp_visitas_${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `ppp_backup_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
-  toast("Dados exportados com sucesso");
+  toast("Backup JSON exportado");
+}
+
+function exportExcel(){
+  const all = loadAll();
+  const wb = XLSX.utils.book_new();
+  const dt = new Date().toLocaleDateString('pt-BR');
+
+  // ── helpers ──────────────────────────────────────────────────────────────
+  const v = (val) => (val!=null && val!=='' && val!==undefined) ? String(val) : '';
+  const yn = (val) => val==='S' ? 'Sim' : val==='N' ? 'Não' : '';
+
+  const modalidades = [
+    "EF – Anos iniciais","EF – Anos finais","EM regular",
+    "EM integral","EPT de nível médio","EJA","Outro"
+  ];
+  const colegiado_opts = [
+    "Sim – informado e se posicionou formalmente",
+    "Sim – informado, mas não se posicionou formalmente",
+    "Não foi informado"
+  ];
+  const uso_ext_opts = ["Sim","Não"];
+
+  // ── ABA 1: RESUMO ─────────────────────────────────────────────────────────
+  const resumoHeader = [
+    "Escola","Endereço","RQC","Data","Horário","Diretor(a)",
+    "Consultor(a)","Parlamentar(es)","Vice/Supervisor","Outros participantes",
+    "Nº alunos","Nº funcionários","Turnos","Jornada (EM integral)",
+    "Cursos técnicos/parcerias","Selos/reconhecimentos",
+    ...modalidades.map(m=>"Modal.: "+m),
+    "Colegiado – posicionamento","Obs. colegiado",
+    "Uso externo (Escola Aberta etc.)","Desc. uso externo",
+    "Status formulário"
+  ];
+  const resumoRows = [resumoHeader];
+  for(const s of SCHOOLS){
+    const d = all[s.id]||{};
+    const row = [
+      s.name, s.addr, s.rqc, s.day, s.time,
+      v(d.diretor||s.director),
+      v(d.consultor), v(d.parlamentar), v(d.vice), v(d.outros),
+      v(d.n_alunos), v(d.n_func), v(d.turnos), v(d.jornada),
+      v(d.cursos), v(d.selos),
+      ...modalidades.map(m=>d['modal_'+m.replace(/\s/g,'_')]?'Sim':''),
+      d.colegiado!=null ? colegiado_opts[d.colegiado]||'' : '',
+      v(d.colegiado_obs),
+      d.uso_ext!=null ? uso_ext_opts[d.uso_ext]||'' : '',
+      v(d.uso_ext_desc),
+      d._done ? 'Concluído' : Object.keys(d).length>0 ? 'Em andamento' : 'Não iniciado'
+    ];
+    resumoRows.push(row);
+  }
+  const wsResumo = XLSX.utils.aoa_to_sheet(resumoRows);
+  styleSheet(wsResumo, resumoHeader.length, resumoRows.length);
+  XLSX.utils.book_append_sheet(wb, wsResumo, "Resumo");
+
+  // ── ABA 2: AMBIENTES ──────────────────────────────────────────────────────
+  const ambHeader = ["Escola","Ambiente","Existe?","Equipamentos / Observações"];
+  const ambRows = [ambHeader];
+  for(const s of SCHOOLS){
+    const d = all[s.id]||{};
+    const ambData = d.ambientes||{};
+    for(const amb of AMBIENTES){
+      const ad = ambData[amb.id]||{};
+      ambRows.push([
+        s.name,
+        amb.name,
+        yn(ad.exists),
+        v(ad.obs)
+      ]);
+    }
+  }
+  const wsAmb = XLSX.utils.aoa_to_sheet(ambRows);
+  styleSheet(wsAmb, ambHeader.length, ambRows.length);
+  XLSX.utils.book_append_sheet(wb, wsAmb, "Ambientes");
+
+  // ── ABA 3: ITENS VERIFICADOS ──────────────────────────────────────────────
+  const ckHeader = ["Escola","Ambiente","Item","Verificado?"];
+  const ckRows = [ckHeader];
+  for(const s of SCHOOLS){
+    const d = all[s.id]||{};
+    const ambData = d.ambientes||{};
+    for(const amb of AMBIENTES){
+      const checks = CK[amb.ck]||[];
+      if(!checks.length) continue;
+      const ad = ambData[amb.id]||{};
+      for(const item of checks){
+        const ck_key = item.replace(/[^a-z0-9]/gi,'_');
+        const checked = (ad.checks||{})[ck_key];
+        ckRows.push([
+          s.name,
+          amb.name,
+          item,
+          checked ? 'Sim' : (ad.exists==='S' ? 'Não' : '')
+        ]);
+      }
+    }
+  }
+  const wsCk = XLSX.utils.aoa_to_sheet(ckRows);
+  styleSheet(wsCk, ckHeader.length, ckRows.length);
+  XLSX.utils.book_append_sheet(wb, wsCk, "Itens verificados");
+
+  // ── ABA 4: OBRAS ──────────────────────────────────────────────────────────
+  const obrasHeader = ["Escola","Nº","Descrição da obra","Fonte","Situação"];
+  const obrasRows = [obrasHeader];
+  for(const s of SCHOOLS){
+    const d = all[s.id]||{};
+    const obras = d.obras||[];
+    if(obras.length===0){
+      obrasRows.push([s.name,"","","",""]);
+    } else {
+      obras.forEach((o,i)=>{
+        if(o.desc||o.fonte||o.status){
+          obrasRows.push([s.name, i+1, v(o.desc), v(o.fonte), v(o.status)]);
+        }
+      });
+    }
+  }
+  const wsObras = XLSX.utils.aoa_to_sheet(obrasRows);
+  styleSheet(wsObras, obrasHeader.length, obrasRows.length);
+  XLSX.utils.book_append_sheet(wb, wsObras, "Obras");
+
+  // ── ABA 5: MANIFESTAÇÕES ──────────────────────────────────────────────────
+  const mHeader = ["Escola","Manifestações sobre a PPP"];
+  const mRows = [mHeader];
+  for(const s of SCHOOLS){
+    const d = all[s.id]||{};
+    mRows.push([s.name, v(d.manifestacoes)]);
+  }
+  const wsM = XLSX.utils.aoa_to_sheet(mRows);
+  styleSheet(wsM, mHeader.length, mRows.length);
+  XLSX.utils.book_append_sheet(wb, wsM, "Manifestações");
+
+  // ── DOWNLOAD ──────────────────────────────────────────────────────────────
+  const fname = `PPP_Visitas_ECT_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(wb, fname);
+  toast("Planilha exportada com sucesso ✓");
+}
+
+// Apply basic column widths and freeze first row
+function styleSheet(ws, nCols, nRows){
+  // Freeze header row
+  ws['!freeze'] = {xSplit:0, ySplit:1, topLeftCell:"A2"};
+  // Auto-width heuristic per column
+  const range = XLSX.utils.decode_range(ws['!ref']||"A1");
+  const colWidths = [];
+  for(let c=range.s.c; c<=range.e.c; c++){
+    let max=10;
+    for(let r=range.s.r; r<=range.e.r; r++){
+      const cell = ws[XLSX.utils.encode_cell({r,c})];
+      if(cell&&cell.v){
+        const len = String(cell.v).length;
+        if(len>max) max=len;
+      }
+    }
+    colWidths.push({wch: Math.min(max+2, 60)});
+  }
+  ws['!cols'] = colWidths;
 }
 function importData(e){
   const file = e.target.files[0];
@@ -728,6 +996,398 @@ function statBar(label, count, total, pct){
       <span class="stat-count">${count}/${total}</span>
     </div>
   </div>`;
+}
+
+function printSchool(sid){
+  const s = SCHOOLS.find(x=>x.id===sid);
+  const d = loadAll()[sid]||{};
+  const pv = document.getElementById('print-view');
+
+  const fv = (k,fallback="") => d[k]!=null&&d[k]!==''?String(d[k]):(fallback||'');
+  const yn2 = v => v==='S'?'<span class="pv-exists-sim">Sim</span>':v==='N'?'<span class="pv-exists-nao">Não</span>':'–';
+  const colegiado_opts = [
+    "Sim – informado e se posicionou formalmente",
+    "Sim – informado, mas não se posicionou formalmente",
+    "Não foi informado"
+  ];
+  const uso_ext_opts = ["Sim","Não"];
+  const modalidades = ["EF – Anos iniciais","EF – Anos finais","EM regular","EM integral","EPT de nível médio","EJA","Outro"];
+  const modTags = modalidades.filter(m=>d['modal_'+m.replace(/\s/g,'_')])
+    .map(m=>`<span class="pv-tag">${m}</span>`).join('');
+
+  // ── SECTION 1 ──
+  let s1 = `<div class="pv-body">
+    <div class="pv-row">
+      <div class="pv-field"><label>Requerimento</label><div class="pv-val">${s.rqc}</div></div>
+      <div class="pv-field"><label>Data / Horário</label><div class="pv-val">${s.day} – ${s.time}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field"><label>Diretor(a)</label><div class="pv-val">${fv('diretor',s.director)}</div></div>
+      <div class="pv-field"><label>Vice / Supervisor(a)</label><div class="pv-val">${fv('vice')||'–'}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field"><label>Consultor(a)</label><div class="pv-val">${fv('consultor')||'–'}</div></div>
+      <div class="pv-field"><label>Parlamentar(es)</label><div class="pv-val">${fv('parlamentar')||'–'}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field" style="flex:100%"><label>Outros participantes</label><div class="pv-val">${fv('outros')||'–'}</div></div>
+    </div>
+  </div>`;
+
+  // ── SECTION 2 ──
+  let s2 = `<div class="pv-body">
+    <div class="pv-row">
+      <div class="pv-field"><label>Nº de alunos</label><div class="pv-val">${fv('n_alunos')||'–'}</div></div>
+      <div class="pv-field"><label>Nº de funcionários</label><div class="pv-val">${fv('n_func')||'–'}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field"><label>Turnos</label><div class="pv-val">${fv('turnos')||'–'}</div></div>
+      <div class="pv-field"><label>Jornada (EM integral)</label><div class="pv-val">${fv('jornada')||'–'}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field" style="flex:100%"><label>Modalidades</label>
+        <div class="pv-val">${modTags||'–'}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field" style="flex:100%"><label>Cursos técnicos / parcerias</label>
+        <div class="pv-val">${fv('cursos')||'–'}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field" style="flex:100%"><label>Selos / reconhecimentos</label>
+        <div class="pv-val">${fv('selos')||'–'}</div></div>
+    </div>
+    <div class="pv-row">
+      <div class="pv-field" style="flex:100%"><label>Colegiado – posicionamento</label>
+        <div class="pv-val">${d.colegiado!=null?colegiado_opts[d.colegiado]:'–'}</div></div>
+    </div>
+    ${fv('colegiado_obs')?`<div class="pv-row"><div class="pv-field" style="flex:100%"><label>Obs. colegiado</label><div class="pv-val">${fv('colegiado_obs')}</div></div></div>`:''}
+    <div class="pv-row">
+      <div class="pv-field"><label>Uso externo (Escola Aberta etc.)</label>
+        <div class="pv-val">${d.uso_ext!=null?uso_ext_opts[d.uso_ext]:'–'}</div></div>
+      ${fv('uso_ext_desc')?`<div class="pv-field"><label>Descrição</label><div class="pv-val">${fv('uso_ext_desc')}</div></div>`:''}
+    </div>
+  </div>`;
+
+  // ── SECTION 3 – AMBIENTES ──
+  const ambData = d.ambientes||{};
+  let ambRows = '';
+  for(const amb of AMBIENTES){
+    const ad = ambData[amb.id]||{};
+    const checks = CK[amb.ck]||[];
+    let checksHtml = '';
+    if(checks.length && ad.exists==='S'){
+      checksHtml = '<div class="pv-checks">';
+      for(const item of checks){
+        const ck_key = item.replace(/[^a-z0-9]/gi,'_');
+        const on = (ad.checks||{})[ck_key];
+        checksHtml += `<span class="pv-check ${on?'on':'off'}">${on?'✓':'✗'} ${item}</span>`;
+      }
+      checksHtml += '</div>';
+    }
+    ambRows += `<tr>
+      <td><strong>${amb.name}</strong></td>
+      <td style="text-align:center;width:50px">${yn2(ad.exists)}</td>
+      <td>${checksHtml}</td>
+      <td style="min-width:140px">${ad.obs?ad.obs.replace(/\n/g,'<br>'):'–'}</td>
+    </tr>`;
+  }
+  let s3 = `<div class="pv-body">
+    <table class="pv-amb-table">
+      <thead><tr>
+        <th style="width:28%">Ambiente</th>
+        <th style="width:7%">Existe?</th>
+        <th style="width:35%">Itens verificados</th>
+        <th>Observações</th>
+      </tr></thead>
+      <tbody>${ambRows}</tbody>
+    </table>
+  </div>`;
+
+  // ── SECTION 4 – OBRAS ──
+  const obras = (d.obras||[]).filter(o=>o.desc||o.fonte||o.status);
+  let s4 = '<div class="pv-body">';
+  if(obras.length===0){
+    s4 += '<p style="color:#bbb;font-size:13px;">Nenhuma obra registrada.</p>';
+  } else {
+    s4 += `<table class="pv-obra-table">
+      <thead><tr><th>Descrição</th><th>Fonte</th><th>Situação</th></tr></thead>
+      <tbody>${obras.map(o=>`<tr>
+        <td>${o.desc||'–'}</td>
+        <td>${o.fonte||'–'}</td>
+        <td>${o.status||'–'}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  }
+  s4 += '</div>';
+
+  // ── SECTION 5 – MANIFESTAÇÕES ──
+  let s5 = `<div class="pv-body">
+    <div class="pv-manif">${fv('manifestacoes')||'(não preenchido)'}</div>
+  </div>`;
+
+  // ── ASSEMBLE ──
+  const pvSection = (title,body) =>
+    `<div class="pv-section"><div class="pv-section-title">${title}</div>${body}</div>`;
+
+  pv.innerHTML = `
+    <div class="pv-print-bar">
+      <button class="pv-btn sec" onclick="document.getElementById('print-view').style.display='none';showView('form');">&#8592; Voltar</button>
+      <span>${s.name}</span>
+      <button class="pv-btn" onclick="window.print()">&#128438; Imprimir / Salvar PDF</button>
+    </div>
+    <div style="padding:16px;max-width:900px;margin:0 auto;">
+      <div class="pv-header">
+        <div class="pv-name">${s.name}</div>
+        <div class="pv-sub">${s.addr}</div>
+        <div class="pv-sub">${s.rqc} · ${s.day} · ${s.time} · PPP Educacional – Conc. Internacional nº 1/2026</div>
+      </div>
+      ${pvSection("1. Identificação da visita", s1)}
+      ${pvSection("2. Oferta educacional", s2)}
+      ${pvSection("3. Ambientes", s3)}
+      ${pvSection("4. Obras aprovadas ou em andamento", s4)}
+      ${pvSection("5. Manifestações sobre a PPP", s5)}
+    </div>`;
+
+  pv.style.display = 'block';
+  document.getElementById('view-form').style.display = 'none';
+  document.getElementById('topbar').style.display = 'none';
+  window.scrollTo(0,0);
+}
+
+function clearAllData(){
+  const confirmed = window.confirm(
+    "Quer mesmo limpar todos os dados?\n\nEsta ação apagará os formulários de todas as 12 escolas e não poderá ser desfeita.\n\nRecomenda-se exportar um backup antes de prosseguir."
+  );
+  if(!confirmed) return;
+  localStorage.removeItem(STORE_KEY);
+  renderList();
+  toast("Todos os dados foram apagados");
+}
+
+// ── PDF EXPORT ────────────────────────────────────────────────────────────────
+function exportPDF(sid){
+  const s = SCHOOLS.find(x=>x.id===sid);
+  const d = loadSchool(sid);
+  const ambData = d.ambientes||{};
+
+  const modalidades = [
+    "EF – Anos iniciais","EF – Anos finais","EM regular",
+    "EM integral","EPT de nível médio","EJA","Outro"
+  ];
+  const colegiado_opts = [
+    "Sim – informado e se posicionou formalmente",
+    "Sim – informado, mas não se posicionou formalmente",
+    "Não foi informado"
+  ];
+  const uso_ext_opts = ["Sim","Não"];
+  const v = (val,fb="—") => (val!=null&&val!==''&&val!==undefined)?String(val):fb;
+
+  // ── helpers ──
+  const field = (label, value) =>
+    `<div class="pdf-field"><span class="pdf-label">${label}</span><div class="pdf-val">${v(value)}</div></div>`;
+  const field2 = (l1,v1,l2,v2) =>
+    `<table style="width:100%;border:none;margin-bottom:5pt;font-size:9.5pt;"><tr>
+      <td style="border:none;width:50%;padding:0 8pt 0 0;vertical-align:top;">${field(l1,v1)}</td>
+      <td style="border:none;width:50%;padding:0;vertical-align:top;">${field(l2,v2)}</td>
+    </tr></table>`;
+
+  // ── status ──
+  const status = d._done ? '<span class="pdf-badge-done">● Concluído</span>'
+    : Object.keys(d).length>0 ? '<span class="pdf-badge-partial">◐ Em andamento</span>'
+    : '<span class="pdf-badge-empty">○ Não iniciado</span>';
+
+  let body = `
+  <div style="background:#1A3A5C;color:#fff;padding:10pt 12pt;margin-bottom:10pt;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+    <div style="font-size:15pt;font-weight:bold;">${s.name}</div>
+    <div style="font-size:9.5pt;opacity:.8;margin-top:2pt;">${s.addr}</div>
+    <div style="font-size:9pt;opacity:.65;margin-top:2pt;">${s.rqc} &nbsp;·&nbsp; ${s.day} &nbsp;·&nbsp; ${s.time} &nbsp;·&nbsp; ${status}</div>
+  </div>`;
+
+  // ── 1. Identificação ──
+  body += `<div class="pdf-section-title">1. Identificação da visita</div>`;
+  body += field2("Consultor(a) responsável", d.consultor, "Parlamentar(es) presente(s)", d.parlamentar);
+  body += field2("Diretor(a)", d.diretor||s.director, "Vice-diretor(a) / Supervisor(a)", d.vice);
+  body += field("Outros participantes", d.outros);
+
+  // ── 2. Oferta educacional ──
+  body += `<div class="pdf-section-title">2. Oferta educacional e perfil do alunado</div>`;
+  body += field2("Nº de alunos matriculados", d.n_alunos, "Nº de funcionários (ef./contr.)", d.n_func);
+  body += field2("Turnos de funcionamento", d.turnos, "Jornada diária (EM integral)", d.jornada);
+
+  const mods = modalidades.filter(m=>d['modal_'+m.replace(/\s/g,'_')]);
+  body += `<div class="pdf-field"><span class="pdf-label">Etapas / modalidades</span>
+    <div class="pdf-val">${mods.length ? mods.join(' &nbsp;|&nbsp; ') : '—'}</div></div>`;
+
+  body += field("Cursos técnicos / parcerias", d.cursos);
+  body += field("Selos / reconhecimentos", d.selos);
+
+  const col_label = d.colegiado!=null ? colegiado_opts[d.colegiado] : null;
+  body += `<div class="pdf-field"><span class="pdf-label">Colegiado escolar – posicionamento sobre o leilão</span>
+    <div class="pdf-val">${col_label||'—'}</div></div>`;
+  if(d.colegiado_obs) body += field("Observações (colegiado)", d.colegiado_obs);
+
+  const uso_label = d.uso_ext!=null ? uso_ext_opts[d.uso_ext] : null;
+  body += `<div class="pdf-field"><span class="pdf-label">Uso externo da escola (fora do horário regular)</span>
+    <div class="pdf-val">${uso_label||'—'}${d.uso_ext_desc ? ' – '+d.uso_ext_desc : ''}</div></div>`;
+
+  // ── 3. Ambientes ──
+  body += `<div class="pdf-section-title">3. Ambientes</div>`;
+  body += `<table class="pdf-table">
+    <tr><th style="width:28%">Ambiente</th><th style="width:7%">Existe?</th><th style="width:30%">Itens verificados</th><th>Equipamentos / Observações</th></tr>`;
+
+  for(const amb of AMBIENTES){
+    const ad = ambData[amb.id]||{};
+    const exists = ad.exists==='S' ? '✓ Sim' : ad.exists==='N' ? '✗ Não' : '';
+    const existsStyle = ad.exists==='S' ? 'color:#2E7D47;font-weight:bold' : ad.exists==='N' ? 'color:#c0392b' : 'color:#999';
+    const checks = CK[amb.ck]||[];
+    let ckHtml = '';
+    if(checks.length && ad.exists==='S'){
+      ckHtml = checks.map(item=>{
+        const key = item.replace(/[^a-z0-9]/gi,'_');
+        const checked = (ad.checks||{})[key];
+        return `<span class="pdf-check ${checked?'pdf-check-yes':'pdf-check-no'}">${checked?'✓':'○'} ${item}</span>`;
+      }).join('');
+    }
+    // extra fields
+    let extras = '';
+    if(amb.extraFields && ad.exists==='S'){
+      extras = amb.extraFields.map(ef=>{
+        const val = (ad.extra||{})[ef.id];
+        return val ? `<div style="font-size:8.5pt;color:#555;margin-top:2pt;"><b>${ef.label}:</b> ${val}</div>` : '';
+      }).join('');
+    }
+    const obsHtml = ad.obs ? `<div class="pdf-obs">${ad.obs}</div>` : '';
+    body += `<tr>
+      <td><b>${amb.name}</b></td>
+      <td style="${existsStyle};text-align:center">${exists}</td>
+      <td style="font-size:8.5pt">${ckHtml||'—'}</td>
+      <td>${extras}${obsHtml||'—'}</td>
+    </tr>`;
+  }
+  body += `</table>`;
+
+  // ── 4. Obras ──
+  body += `<div class="pdf-section-title">4. Obras aprovadas ou em andamento</div>`;
+  const obras = (d.obras||[]).filter(o=>o.desc||o.fonte||o.status);
+  if(obras.length){
+    body += `<table class="pdf-table">
+      <tr><th style="width:5%">Nº</th><th style="width:38%">Descrição</th><th style="width:22%">Fonte</th><th>Situação</th></tr>`;
+    obras.forEach((o,i)=>{
+      body += `<tr><td>${i+1}</td><td>${v(o.desc)}</td><td>${v(o.fonte)}</td><td>${v(o.status)}</td></tr>`;
+    });
+    body += `</table>`;
+  } else {
+    body += `<p style="font-size:9.5pt;color:#888;margin-bottom:8pt;">Nenhuma obra registrada.</p>`;
+  }
+
+  // ── 5. Manifestações ──
+  body += `<div class="pdf-section-title">5. Manifestações sobre a PPP</div>`;
+  body += `<div style="font-size:9.5pt;white-space:pre-wrap;line-height:1.5;">${v(d.manifestacoes)}</div>`;
+
+  // ── footer ──
+  body += `<div style="margin-top:16pt;border-top:0.5pt solid #ccc;padding-top:6pt;font-size:8pt;color:#999;text-align:right;">
+    PPP Educacional – ECT/ALMG &nbsp;·&nbsp; Gerado em ${new Date().toLocaleString('pt-BR')}
+  </div>`;
+
+  // Open print window
+  const win = window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <title>Formulário – ${s.name}</title>
+    <style>
+      * { box-sizing:border-box; margin:0; padding:0; }
+      body { font-family: Arial, sans-serif; font-size:10pt; color:#1C1C1C; padding:16pt 20pt; }
+      .pdf-section-title { font-size:10pt;font-weight:bold;color:#1A3A5C;text-transform:uppercase;
+        border-bottom:1.5pt solid #1A3A5C;margin:10pt 0 6pt;padding-bottom:2pt; }
+      .pdf-table { width:100%;border-collapse:collapse;margin-bottom:8pt;font-size:9pt; }
+      .pdf-table th { background:#E8EFF7;border:0.5pt solid #aaa;padding:4pt 6pt;text-align:left;font-size:8.5pt; }
+      .pdf-table td { border:0.5pt solid #ccc;padding:4pt 6pt;vertical-align:top; }
+      .pdf-table tr:nth-child(even) td { background:#F9F9F9; }
+      .pdf-field { margin-bottom:5pt; }
+      .pdf-label { font-weight:bold;color:#444;font-size:8pt;text-transform:uppercase;display:block; }
+      .pdf-val { margin-top:1pt;font-size:9.5pt; }
+      .pdf-check { display:inline-block;margin-right:8pt;font-size:8.5pt; }
+      .pdf-check-yes { color:#2E7D47;font-weight:bold; }
+      .pdf-check-no  { color:#bbb; }
+      .pdf-obs { font-style:italic;color:#555;font-size:8.5pt;margin-top:2pt; }
+      .pdf-badge-done    { color:#2E7D47;font-weight:bold; }
+      .pdf-badge-partial { color:#B45A00;font-weight:bold; }
+      @page { size:A4; margin:1.5cm 1.5cm 1.8cm; }
+    
+  /* ── PRINT ── */
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    #topbar, #view-list, #view-stats, .form-actions,
+    .btn-primary, .btn-back, .add-btn, .exists-toggle { display: none !important; }
+    #view-form { display: block !important; padding: 0; max-width: 100%; }
+    .section { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; margin-bottom: 10px; }
+    .section-body { display: block !important; }
+    .section-head { background: #eef2f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .form-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .amb-body { display: block !important; }
+    .amb-head { background: #f2f4f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .checklist { grid-template-columns: 1fr 1fr; }
+    textarea, input[type=text] { border: none; border-bottom: 1px solid #ccc; background: transparent; }
+    .day-header, #school-list { display: none !important; }
+    #print-view { display: block !important; }
+    @page { margin: 1.2cm 1.5cm; size: A4; }
+  }
+  #print-view { display: none; }
+
+  /* print view layout */
+  .pv-header { background: #1a3a5c; color: #fff; border-radius: 6px;
+    padding: 14px 18px; margin-bottom: 14px; }
+  .pv-header .pv-name { font-size: 17px; font-weight: 700; }
+  .pv-header .pv-sub  { font-size: 12px; opacity: .75; margin-top: 3px; }
+  .pv-section { border: 1px solid #ccc; border-radius: 6px;
+    margin-bottom: 10px; overflow: hidden; break-inside: avoid; }
+  .pv-section-title { background: #eef2f7; padding: 8px 14px;
+    font-size: 12px; font-weight: 700; color: #1a3a5c;
+    text-transform: uppercase; letter-spacing: .04em;
+    border-bottom: 1px solid #ccc; }
+  .pv-body { padding: 12px 14px; }
+  .pv-row { display: flex; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+  .pv-field { flex: 1; min-width: 160px; }
+  .pv-field label { display: block; font-size: 10px; font-weight: 700;
+    color: #6b6760; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; }
+  .pv-field .pv-val { font-size: 13px; border-bottom: 1px solid #ccc;
+    padding-bottom: 2px; min-height: 18px; word-break: break-word; }
+  .pv-field .pv-val.empty { color: #bbb; font-style: italic; }
+  .pv-note { font-size: 12px; margin-bottom: 8px; line-height: 1.5; }
+  .pv-amb-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .pv-amb-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
+    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
+  .pv-amb-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; }
+  .pv-amb-table tr:nth-child(even) td { background: #fafafa; }
+  .pv-exists-sim { color: #2e7d47; font-weight: 700; }
+  .pv-exists-nao { color: #c8460a; font-weight: 700; }
+  .pv-checks { display: flex; flex-wrap: wrap; gap: 3px 12px; }
+  .pv-check { font-size: 11px; white-space: nowrap; }
+  .pv-check.on  { color: #1a3a5c; font-weight: 600; }
+  .pv-check.off { color: #bbb; text-decoration: line-through; }
+  .pv-obra-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  .pv-obra-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
+    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
+  .pv-obra-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; font-size: 12px; }
+  .pv-manif { font-size: 13px; line-height: 1.6; white-space: pre-wrap;
+    background: #fafafa; border: 1px solid #ddd; border-radius: 4px;
+    padding: 10px 12px; min-height: 40px; }
+  .pv-tag { display: inline-block; background: #e8eff7; color: #1a3a5c;
+    border-radius: 3px; padding: 1px 7px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+  .pv-btn { background: #1a3a5c; color: #fff; border: none; border-radius: 6px;
+    padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
+    font-family: var(--font); margin-right: 8px; margin-bottom: 6px; }
+  .pv-btn.sec { background: #fff; color: #1a3a5c; border: 1px solid #1a3a5c; }
+  .pv-print-bar { background: #fff; border-bottom: 1px solid #ddd;
+    padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap; position: sticky; top: 0; z-index: 50; }
+  .pv-print-bar span { font-size: 13px; color: #6b6760; flex: 1; }
+
+</style>
+  </head><body>${body}</body></html>`);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>{ win.print(); }, 400);
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
