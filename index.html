@@ -219,73 +219,7 @@
   .pdf-print-container { display: none; }
   @media print { .pdf-print-container { display: block; } }
 
-  /* ── PRINT ── */
-  @media print {
-    body { background: #fff; font-size: 12px; }
-    #topbar, #view-list, #view-stats, .form-actions,
-    .btn-primary, .btn-back, .add-btn, .exists-toggle { display: none !important; }
-    #view-form { display: block !important; padding: 0; max-width: 100%; }
-    .section { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; margin-bottom: 10px; }
-    .section-body { display: block !important; }
-    .section-head { background: #eef2f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .form-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .amb-body { display: block !important; }
-    .amb-head { background: #f2f4f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .checklist { grid-template-columns: 1fr 1fr; }
-    textarea, input[type=text] { border: none; border-bottom: 1px solid #ccc; background: transparent; }
-    .day-header, #school-list { display: none !important; }
-    #print-view { display: block !important; }
-    @page { margin: 1.2cm 1.5cm; size: A4; }
-  }
-  #print-view { display: none; }
-
-  /* print view layout */
-  .pv-header { background: #1a3a5c; color: #fff; border-radius: 6px;
-    padding: 14px 18px; margin-bottom: 14px; }
-  .pv-header .pv-name { font-size: 17px; font-weight: 700; }
-  .pv-header .pv-sub  { font-size: 12px; opacity: .75; margin-top: 3px; }
-  .pv-section { border: 1px solid #ccc; border-radius: 6px;
-    margin-bottom: 10px; overflow: hidden; break-inside: avoid; }
-  .pv-section-title { background: #eef2f7; padding: 8px 14px;
-    font-size: 12px; font-weight: 700; color: #1a3a5c;
-    text-transform: uppercase; letter-spacing: .04em;
-    border-bottom: 1px solid #ccc; }
-  .pv-body { padding: 12px 14px; }
-  .pv-row { display: flex; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
-  .pv-field { flex: 1; min-width: 160px; }
-  .pv-field label { display: block; font-size: 10px; font-weight: 700;
-    color: #6b6760; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; }
-  .pv-field .pv-val { font-size: 13px; border-bottom: 1px solid #ccc;
-    padding-bottom: 2px; min-height: 18px; word-break: break-word; }
-  .pv-field .pv-val.empty { color: #bbb; font-style: italic; }
-  .pv-note { font-size: 12px; margin-bottom: 8px; line-height: 1.5; }
-  .pv-amb-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
-  .pv-amb-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
-    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
-  .pv-amb-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; }
-  .pv-amb-table tr:nth-child(even) td { background: #fafafa; }
-  .pv-exists-sim { color: #2e7d47; font-weight: 700; }
-  .pv-exists-nao { color: #c8460a; font-weight: 700; }
-  .pv-checks { display: flex; flex-wrap: wrap; gap: 3px 12px; }
-  .pv-check { font-size: 11px; white-space: nowrap; }
-  .pv-check.on  { color: #1a3a5c; font-weight: 600; }
-  .pv-check.off { color: #bbb; text-decoration: line-through; }
-  .pv-obra-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
-  .pv-obra-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
-    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
-  .pv-obra-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; font-size: 12px; }
-  .pv-manif { font-size: 13px; line-height: 1.6; white-space: pre-wrap;
-    background: #fafafa; border: 1px solid #ddd; border-radius: 4px;
-    padding: 10px 12px; min-height: 40px; }
-  .pv-tag { display: inline-block; background: #e8eff7; color: #1a3a5c;
-    border-radius: 3px; padding: 1px 7px; font-size: 11px; font-weight: 600; margin-right: 4px; }
-  .pv-btn { background: #1a3a5c; color: #fff; border: none; border-radius: 6px;
-    padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
-    font-family: var(--font); margin-right: 8px; margin-bottom: 6px; }
-  .pv-btn.sec { background: #fff; color: #1a3a5c; border: 1px solid #1a3a5c; }
-  .pv-print-bar { background: #fff; border-bottom: 1px solid #ddd;
-    padding: 10px 16px; display: flex; align-items: center; gap: 10px;
-    flex-wrap: wrap; position: sticky; top: 0; z-index: 50; }
+  
   .pv-print-bar span { font-size: 13px; color: #6b6760; flex: 1; }
 
 </style>
@@ -323,9 +257,6 @@
   <div id="form-content"></div>
 </div>
 
-
-<!-- PRINT VIEW -->
-<div id="print-view"></div>
 <!-- STATS VIEW -->
 <div id="view-stats" class="view">
   <div class="stats-title">Painel estatístico</div>
@@ -998,160 +929,20 @@ function statBar(label, count, total, pct){
   </div>`;
 }
 
-function printSchool(sid){
+function clearSchool(sid){
   const s = SCHOOLS.find(x=>x.id===sid);
-  const d = loadAll()[sid]||{};
-  const pv = document.getElementById('print-view');
-
-  const fv = (k,fallback="") => d[k]!=null&&d[k]!==''?String(d[k]):(fallback||'');
-  const yn2 = v => v==='S'?'<span class="pv-exists-sim">Sim</span>':v==='N'?'<span class="pv-exists-nao">Não</span>':'–';
-  const colegiado_opts = [
-    "Sim – informado e se posicionou formalmente",
-    "Sim – informado, mas não se posicionou formalmente",
-    "Não foi informado"
-  ];
-  const uso_ext_opts = ["Sim","Não"];
-  const modalidades = ["EF – Anos iniciais","EF – Anos finais","EM regular","EM integral","EPT de nível médio","EJA","Outro"];
-  const modTags = modalidades.filter(m=>d['modal_'+m.replace(/\s/g,'_')])
-    .map(m=>`<span class="pv-tag">${m}</span>`).join('');
-
-  // ── SECTION 1 ──
-  let s1 = `<div class="pv-body">
-    <div class="pv-row">
-      <div class="pv-field"><label>Requerimento</label><div class="pv-val">${s.rqc}</div></div>
-      <div class="pv-field"><label>Data / Horário</label><div class="pv-val">${s.day} – ${s.time}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field"><label>Diretor(a)</label><div class="pv-val">${fv('diretor',s.director)}</div></div>
-      <div class="pv-field"><label>Vice / Supervisor(a)</label><div class="pv-val">${fv('vice')||'–'}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field"><label>Consultor(a)</label><div class="pv-val">${fv('consultor')||'–'}</div></div>
-      <div class="pv-field"><label>Parlamentar(es)</label><div class="pv-val">${fv('parlamentar')||'–'}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field" style="flex:100%"><label>Outros participantes</label><div class="pv-val">${fv('outros')||'–'}</div></div>
-    </div>
-  </div>`;
-
-  // ── SECTION 2 ──
-  let s2 = `<div class="pv-body">
-    <div class="pv-row">
-      <div class="pv-field"><label>Nº de alunos</label><div class="pv-val">${fv('n_alunos')||'–'}</div></div>
-      <div class="pv-field"><label>Nº de funcionários</label><div class="pv-val">${fv('n_func')||'–'}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field"><label>Turnos</label><div class="pv-val">${fv('turnos')||'–'}</div></div>
-      <div class="pv-field"><label>Jornada (EM integral)</label><div class="pv-val">${fv('jornada')||'–'}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field" style="flex:100%"><label>Modalidades</label>
-        <div class="pv-val">${modTags||'–'}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field" style="flex:100%"><label>Cursos técnicos / parcerias</label>
-        <div class="pv-val">${fv('cursos')||'–'}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field" style="flex:100%"><label>Selos / reconhecimentos</label>
-        <div class="pv-val">${fv('selos')||'–'}</div></div>
-    </div>
-    <div class="pv-row">
-      <div class="pv-field" style="flex:100%"><label>Colegiado – posicionamento</label>
-        <div class="pv-val">${d.colegiado!=null?colegiado_opts[d.colegiado]:'–'}</div></div>
-    </div>
-    ${fv('colegiado_obs')?`<div class="pv-row"><div class="pv-field" style="flex:100%"><label>Obs. colegiado</label><div class="pv-val">${fv('colegiado_obs')}</div></div></div>`:''}
-    <div class="pv-row">
-      <div class="pv-field"><label>Uso externo (Escola Aberta etc.)</label>
-        <div class="pv-val">${d.uso_ext!=null?uso_ext_opts[d.uso_ext]:'–'}</div></div>
-      ${fv('uso_ext_desc')?`<div class="pv-field"><label>Descrição</label><div class="pv-val">${fv('uso_ext_desc')}</div></div>`:''}
-    </div>
-  </div>`;
-
-  // ── SECTION 3 – AMBIENTES ──
-  const ambData = d.ambientes||{};
-  let ambRows = '';
-  for(const amb of AMBIENTES){
-    const ad = ambData[amb.id]||{};
-    const checks = CK[amb.ck]||[];
-    let checksHtml = '';
-    if(checks.length && ad.exists==='S'){
-      checksHtml = '<div class="pv-checks">';
-      for(const item of checks){
-        const ck_key = item.replace(/[^a-z0-9]/gi,'_');
-        const on = (ad.checks||{})[ck_key];
-        checksHtml += `<span class="pv-check ${on?'on':'off'}">${on?'✓':'✗'} ${item}</span>`;
-      }
-      checksHtml += '</div>';
-    }
-    ambRows += `<tr>
-      <td><strong>${amb.name}</strong></td>
-      <td style="text-align:center;width:50px">${yn2(ad.exists)}</td>
-      <td>${checksHtml}</td>
-      <td style="min-width:140px">${ad.obs?ad.obs.replace(/\n/g,'<br>'):'–'}</td>
-    </tr>`;
-  }
-  let s3 = `<div class="pv-body">
-    <table class="pv-amb-table">
-      <thead><tr>
-        <th style="width:28%">Ambiente</th>
-        <th style="width:7%">Existe?</th>
-        <th style="width:35%">Itens verificados</th>
-        <th>Observações</th>
-      </tr></thead>
-      <tbody>${ambRows}</tbody>
-    </table>
-  </div>`;
-
-  // ── SECTION 4 – OBRAS ──
-  const obras = (d.obras||[]).filter(o=>o.desc||o.fonte||o.status);
-  let s4 = '<div class="pv-body">';
-  if(obras.length===0){
-    s4 += '<p style="color:#bbb;font-size:13px;">Nenhuma obra registrada.</p>';
-  } else {
-    s4 += `<table class="pv-obra-table">
-      <thead><tr><th>Descrição</th><th>Fonte</th><th>Situação</th></tr></thead>
-      <tbody>${obras.map(o=>`<tr>
-        <td>${o.desc||'–'}</td>
-        <td>${o.fonte||'–'}</td>
-        <td>${o.status||'–'}</td>
-      </tr>`).join('')}</tbody>
-    </table>`;
-  }
-  s4 += '</div>';
-
-  // ── SECTION 5 – MANIFESTAÇÕES ──
-  let s5 = `<div class="pv-body">
-    <div class="pv-manif">${fv('manifestacoes')||'(não preenchido)'}</div>
-  </div>`;
-
-  // ── ASSEMBLE ──
-  const pvSection = (title,body) =>
-    `<div class="pv-section"><div class="pv-section-title">${title}</div>${body}</div>`;
-
-  pv.innerHTML = `
-    <div class="pv-print-bar">
-      <button class="pv-btn sec" onclick="document.getElementById('print-view').style.display='none';showView('form');">&#8592; Voltar</button>
-      <span>${s.name}</span>
-      <button class="pv-btn" onclick="window.print()">&#128438; Imprimir / Salvar PDF</button>
-    </div>
-    <div style="padding:16px;max-width:900px;margin:0 auto;">
-      <div class="pv-header">
-        <div class="pv-name">${s.name}</div>
-        <div class="pv-sub">${s.addr}</div>
-        <div class="pv-sub">${s.rqc} · ${s.day} · ${s.time} · PPP Educacional – Conc. Internacional nº 1/2026</div>
-      </div>
-      ${pvSection("1. Identificação da visita", s1)}
-      ${pvSection("2. Oferta educacional", s2)}
-      ${pvSection("3. Ambientes", s3)}
-      ${pvSection("4. Obras aprovadas ou em andamento", s4)}
-      ${pvSection("5. Manifestações sobre a PPP", s5)}
-    </div>`;
-
-  pv.style.display = 'block';
-  document.getElementById('view-form').style.display = 'none';
-  document.getElementById('topbar').style.display = 'none';
-  window.scrollTo(0,0);
+  const confirmed = window.confirm(
+    "Quer mesmo limpar o formulário desta escola?\n\n" +
+    s.name + "\n\n" +
+    "Todos os dados preenchidos serão apagados e não poderão ser recuperados.\n\n" +
+    "Esta ação não afeta os formulários das demais escolas."
+  );
+  if(!confirmed) return;
+  const all = loadAll();
+  delete all[sid];
+  saveAll(all);
+  toast("Formulário de " + s.name + " foi limpo");
+  showView('list');
 }
 
 function clearAllData(){
@@ -1314,73 +1105,7 @@ function exportPDF(sid){
       .pdf-badge-partial { color:#B45A00;font-weight:bold; }
       @page { size:A4; margin:1.5cm 1.5cm 1.8cm; }
     
-  /* ── PRINT ── */
-  @media print {
-    body { background: #fff; font-size: 12px; }
-    #topbar, #view-list, #view-stats, .form-actions,
-    .btn-primary, .btn-back, .add-btn, .exists-toggle { display: none !important; }
-    #view-form { display: block !important; padding: 0; max-width: 100%; }
-    .section { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; margin-bottom: 10px; }
-    .section-body { display: block !important; }
-    .section-head { background: #eef2f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .form-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .amb-body { display: block !important; }
-    .amb-head { background: #f2f4f7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .checklist { grid-template-columns: 1fr 1fr; }
-    textarea, input[type=text] { border: none; border-bottom: 1px solid #ccc; background: transparent; }
-    .day-header, #school-list { display: none !important; }
-    #print-view { display: block !important; }
-    @page { margin: 1.2cm 1.5cm; size: A4; }
-  }
-  #print-view { display: none; }
-
-  /* print view layout */
-  .pv-header { background: #1a3a5c; color: #fff; border-radius: 6px;
-    padding: 14px 18px; margin-bottom: 14px; }
-  .pv-header .pv-name { font-size: 17px; font-weight: 700; }
-  .pv-header .pv-sub  { font-size: 12px; opacity: .75; margin-top: 3px; }
-  .pv-section { border: 1px solid #ccc; border-radius: 6px;
-    margin-bottom: 10px; overflow: hidden; break-inside: avoid; }
-  .pv-section-title { background: #eef2f7; padding: 8px 14px;
-    font-size: 12px; font-weight: 700; color: #1a3a5c;
-    text-transform: uppercase; letter-spacing: .04em;
-    border-bottom: 1px solid #ccc; }
-  .pv-body { padding: 12px 14px; }
-  .pv-row { display: flex; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
-  .pv-field { flex: 1; min-width: 160px; }
-  .pv-field label { display: block; font-size: 10px; font-weight: 700;
-    color: #6b6760; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; }
-  .pv-field .pv-val { font-size: 13px; border-bottom: 1px solid #ccc;
-    padding-bottom: 2px; min-height: 18px; word-break: break-word; }
-  .pv-field .pv-val.empty { color: #bbb; font-style: italic; }
-  .pv-note { font-size: 12px; margin-bottom: 8px; line-height: 1.5; }
-  .pv-amb-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
-  .pv-amb-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
-    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
-  .pv-amb-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; }
-  .pv-amb-table tr:nth-child(even) td { background: #fafafa; }
-  .pv-exists-sim { color: #2e7d47; font-weight: 700; }
-  .pv-exists-nao { color: #c8460a; font-weight: 700; }
-  .pv-checks { display: flex; flex-wrap: wrap; gap: 3px 12px; }
-  .pv-check { font-size: 11px; white-space: nowrap; }
-  .pv-check.on  { color: #1a3a5c; font-weight: 600; }
-  .pv-check.off { color: #bbb; text-decoration: line-through; }
-  .pv-obra-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
-  .pv-obra-table th { background: #eef2f7; padding: 6px 8px; text-align: left;
-    font-size: 11px; border: 1px solid #ccc; font-weight: 700; color: #1a3a5c; }
-  .pv-obra-table td { border: 1px solid #ddd; padding: 6px 8px; vertical-align: top; font-size: 12px; }
-  .pv-manif { font-size: 13px; line-height: 1.6; white-space: pre-wrap;
-    background: #fafafa; border: 1px solid #ddd; border-radius: 4px;
-    padding: 10px 12px; min-height: 40px; }
-  .pv-tag { display: inline-block; background: #e8eff7; color: #1a3a5c;
-    border-radius: 3px; padding: 1px 7px; font-size: 11px; font-weight: 600; margin-right: 4px; }
-  .pv-btn { background: #1a3a5c; color: #fff; border: none; border-radius: 6px;
-    padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
-    font-family: var(--font); margin-right: 8px; margin-bottom: 6px; }
-  .pv-btn.sec { background: #fff; color: #1a3a5c; border: 1px solid #1a3a5c; }
-  .pv-print-bar { background: #fff; border-bottom: 1px solid #ddd;
-    padding: 10px 16px; display: flex; align-items: center; gap: 10px;
-    flex-wrap: wrap; position: sticky; top: 0; z-index: 50; }
+  
   .pv-print-bar span { font-size: 13px; color: #6b6760; flex: 1; }
 
 </style>
