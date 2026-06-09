@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Visitas PPP – ECT/ALMG</title>
+<style>
+  :root {
+    --bg:       #F7F6F2;
+    --surface:  #FFFFFF;
+    --border:   #D8D4CC;
+    --primary:  #1A3A5C;
+    --accent:   #C8460A;
+    --ok:       #2E7D47;
+    --warn:     #B45A00;
+    --text:     #1C1C1C;
+    --muted:    #6B6760;
+    --radius:   6px;
+    --shadow:   0 1px 4px rgba(0,0,0,.10);
+    --font:     'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: var(--font); color: var(--text); font-size: 15px; }
+
+  /* ── NAV ── */
+  #topbar { background: var(--primary); color: #fff; padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+  #topbar h1 { font-size: 13px; font-weight: 600; letter-spacing: .03em; line-height: 1.3; }
+  #topbar .sub { font-size: 11px; opacity: .7; margin-top: 1px; }
+  #topbar-btns { display: flex; gap: 8px; }
+  .icon-btn { background: rgba(255,255,255,.15); border: none; color: #fff;
+    border-radius: var(--radius); padding: 6px 10px; font-size: 12px; cursor: pointer;
+    font-family: var(--font); white-space: nowrap; }
+  .icon-btn:hover { background: rgba(255,255,255,.25); }
+
+  /* ── VIEWS ── */
+  .view { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* ── SCHOOL LIST ── */
+  .day-header { background: var(--primary); color: #fff; padding: 8px 14px;
+    border-radius: var(--radius); font-size: 12px; font-weight: 700;
+    letter-spacing: .06em; margin: 16px 0 8px; text-transform: uppercase; }
+  .school-card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px;
+    cursor: pointer; display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--shadow); transition: box-shadow .15s; }
+  .school-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,.14); }
+  .school-card .info { flex: 1; min-width: 0; }
+  .school-card .name { font-weight: 600; font-size: 14px; }
+  .school-card .meta { font-size: 12px; color: var(--muted); margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .badge { border-radius: 20px; font-size: 11px; font-weight: 700;
+    padding: 3px 9px; white-space: nowrap; flex-shrink: 0; }
+  .badge.done   { background: #D4EDDA; color: var(--ok); }
+  .badge.partial{ background: #FFF3CD; color: var(--warn); }
+  .badge.empty  { background: #E9E7E2; color: var(--muted); }
+  .time-badge   { font-size: 11px; color: var(--primary); font-weight: 700;
+    background: #E8EFF7; border-radius: 4px; padding: 2px 7px; flex-shrink: 0; }
+
+  /* ── FORM VIEW ── */
+  .form-header { background: var(--primary); color: #fff; border-radius: var(--radius);
+    padding: 12px 16px; margin-bottom: 16px; }
+  .form-header .school-name { font-size: 16px; font-weight: 700; }
+  .form-header .school-addr { font-size: 12px; opacity: .75; margin-top: 3px; }
+  .form-header .rqc-row { font-size: 12px; opacity: .65; margin-top: 2px; }
+
+  .section { background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .section-head { background: #EEF2F7; padding: 10px 14px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: 700; font-size: 13px; color: var(--primary); letter-spacing: .02em;
+    user-select: none; border-bottom: 1px solid var(--border); }
+  .section-head .chevron { transition: transform .2s; font-size: 11px; }
+  .section-body { padding: 14px; }
+  .section.collapsed .section-body { display: none; }
+  .section.collapsed .chevron { transform: rotate(-90deg); }
+
+  /* ── FIELDS ── */
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12px; font-weight: 600;
+    color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+  .field input[type=text], .field textarea, .field select {
+    width: 100%; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 8px 10px; font-family: var(--font); font-size: 14px; color: var(--text);
+    background: var(--bg); resize: vertical; }
+  .field input[type=text]:focus, .field textarea:focus {
+    outline: none; border-color: var(--primary); background: #fff; }
+  .field textarea { min-height: 80px; }
+  .field-row { display: flex; gap: 12px; }
+  .field-row .field { flex: 1; }
+
+  /* checkboxes inline */
+  .radio-group { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .radio-opt { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+  .radio-opt input { margin-top: 2px; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--primary); }
+  .radio-opt span { font-size: 13px; line-height: 1.4; }
+
+  /* ── AMBIENTES ── */
+  .amb-list { display: flex; flex-direction: column; gap: 8px; }
+  .amb-card { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .amb-head { display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+    background: #F2F4F7; cursor: pointer; user-select: none; }
+  .amb-head .amb-name { flex: 1; font-size: 13px; font-weight: 600; }
+  .exists-toggle { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .exists-toggle button { border: none; padding: 4px 10px; font-size: 12px; font-weight: 700;
+    cursor: pointer; background: #fff; color: var(--muted); font-family: var(--font); }
+  .exists-toggle button.on-yes { background: var(--ok);    color: #fff; }
+  .exists-toggle button.on-no  { background: var(--accent); color: #fff; }
+  .amb-body { padding: 12px; display: none; border-top: 1px solid var(--border); }
+  .amb-card.open .amb-body { display: block; }
+  .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 16px; margin-bottom: 10px; }
+  @media (max-width: 500px) { .checklist { grid-template-columns: 1fr; } }
+  .ck-item { display: flex; align-items: center; gap: 7px; cursor: pointer; }
+  .ck-item input { width: 15px; height: 15px; flex-shrink: 0; accent-color: var(--primary); }
+  .ck-item span { font-size: 13px; }
+  .amb-obs { margin-top: 8px; }
+  .amb-obs label { font-size: 11px; color: var(--muted); font-weight: 600;
+    text-transform: uppercase; letter-spacing: .04em; display: block; margin-bottom: 4px; }
+  .amb-obs textarea { width: 100%; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 7px 9px; font-size: 13px; font-family: var(--font); min-height: 56px;
+    resize: vertical; background: var(--bg); }
+  .amb-obs textarea:focus { outline: none; border-color: var(--primary); background: #fff; }
+
+  /* num input for salas */
+  .num-field { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .num-field label { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .num-field input { width: 60px; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 4px 8px; font-size: 13px; text-align: center; }
+
+  /* obras table */
+  .obras-list { display: flex; flex-direction: column; gap: 8px; }
+  .obra-row { border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; background: var(--bg); }
+  .obra-row .field { margin-bottom: 8px; }
+  .obra-row .field:last-child { margin-bottom: 0; }
+  .obra-checks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .obra-check { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+  .obra-check input { accent-color: var(--primary); }
+  .obra-check span { font-size: 12px; }
+  .add-btn { border: 1px dashed var(--primary); background: transparent; color: var(--primary);
+    border-radius: var(--radius); padding: 8px 14px; font-size: 13px; font-weight: 600;
+    cursor: pointer; width: 100%; margin-top: 6px; font-family: var(--font); }
+  .add-btn:hover { background: #EEF2F7; }
+
+  /* ── ACTIONS ── */
+  .form-actions { display: flex; gap: 10px; margin-top: 16px; padding-bottom: 24px; }
+  .btn-primary { flex: 1; background: var(--primary); color: #fff; border: none;
+    border-radius: var(--radius); padding: 12px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: var(--font); }
+  .btn-primary:hover { background: #245080; }
+  .btn-back { background: #fff; color: var(--primary); border: 1px solid var(--primary);
+    border-radius: var(--radius); padding: 12px 16px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: var(--font); }
+
+  /* ── STATS VIEW ── */
+  .stats-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+  .stat-section { background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  .stat-section h3 { background: #EEF2F7; padding: 10px 14px; font-size: 13px;
+    color: var(--primary); border-bottom: 1px solid var(--border); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 0; }
+  .stat-item { padding: 10px 14px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .stat-item:last-child { border-bottom: none; }
+  .stat-label { font-size: 13px; flex: 1; }
+  .stat-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .stat-bar { height: 8px; border-radius: 4px; background: var(--primary); min-width: 4px; }
+  .stat-count { font-size: 12px; font-weight: 700; color: var(--primary); white-space: nowrap; }
+
+  .no-data { color: var(--muted); font-size: 13px; padding: 16px; text-align: center; }
+
+  /* export */
+  .export-area { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .btn-export { background: var(--accent); color: #fff; border: none;
+    border-radius: var(--radius); padding: 10px 16px; font-size: 13px; font-weight: 700;
+    cursor: pointer; font-family: var(--font); }
+  .btn-import { background: #fff; color: var(--accent); border: 1px solid var(--accent);
+    border-radius: var(--radius); padding: 10px 16px; font-size: 13px; font-weight: 700;
+    cursor: pointer; font-family: var(--font); }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: #fff; padding: 10px 20px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; opacity: 0; transition: opacity .3s;
+    pointer-events: none; z-index: 999; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div>
+    <div class="sub">PPP Educacional | Conc. Internacional nº 1/2026</div>
+    <h1 id="topbar-title">ECT – Visitas de campo</h1>
+  </div>
+  <div id="topbar-btns">
+    <button class="icon-btn" onclick="showView('list')">&#8592; Escolas</button>
+    <button class="icon-btn" onclick="showView('stats')">&#9656; Stats</button>
+  </div>
+</div>
+
+<!-- LIST VIEW -->
+<div id="view-list" class="view active">
+  <div id="school-list"></div>
+  <div class="export-area" style="margin-top:16px;">
+    <button class="btn-export" onclick="exportData()">&#8659; Exportar dados (JSON)</button>
+    <label class="btn-import" style="cursor:pointer;">
+      &#8657; Importar dados
+      <input type="file" accept=".json" style="display:none" onchange="importData(event)">
+    </label>
+  </div>
+</div>
+
+<!-- FORM VIEW -->
+<div id="view-form" class="view">
+  <div id="form-content"></div>
+</div>
+
+<!-- STATS VIEW -->
+<div id="view-stats" class="view">
+  <div class="stats-title">Painel estatístico</div>
+  <div id="stats-content"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const SCHOOLS = [
+  { id:"s01", day:"11/06/2026", time:"09h00", rqc:"RQC 21.542/2026", name:"EE Doutor Carlos Albuquerque",    addr:"Rua do Flamengo, 351 – Maracanã, Montes Claros/MG",               director:"Carla Patrícia Figueiredo Santos Souza" },
+  { id:"s02", day:"11/06/2026", time:"10h00", rqc:"RQC 21.545/2026", name:"EE Augusta Valle",                addr:"Rua Zita Rêgo Gonçalves, 285 – Interlagos, Montes Claros/MG",    director:"Michelly Silva Teixeira" },
+  { id:"s03", day:"11/06/2026", time:"11h00", rqc:"RQC 21.546/2026", name:"EE Professora Dilma Quadros",     addr:"Rua Divino Espírito Santo, 290 – Planalto, Montes Claros/MG",    director:"Zenaide Dias Santos" },
+  { id:"s04", day:"11/06/2026", time:"12h00", rqc:"RQC 21.547/2026", name:"EE Benjamim Versiani dos Anjos",  addr:"Av. Biô Lopes, 733 – Alice Maia, Montes Claros/MG",               director:"Telma Veloso Santos Costa" },
+  { id:"s05", day:"11/06/2026", time:"14h00", rqc:"RQC 21.548/2026", name:"EE Professor Hamilton Lopes",     addr:"Rua Quita Pereira, 331 – Edgard Pereira, Montes Claros/MG",       director:"Caroline de Fátima Guimarães Cardoso" },
+  { id:"s06", day:"11/06/2026", time:"15h00", rqc:"RQC 21.554/2026", name:"EE Professora Dulce Sarmento",    addr:"Av. Cula Mangabeira, 1008 – Santo Expedito, Montes Claros/MG",   director:"Patrícia Ferreira Alves" },
+  { id:"s07", day:"11/06/2026", time:"16h00", rqc:"RQC 21.556/2026", name:"EE Professor Alcides de Carvalho",addr:"Av. Juarez Nunes, S/N – Jardim São Luiz, Montes Claros/MG",       director:"Marluce Cardoso da Mata" },
+  { id:"s08", day:"11/06/2026", time:"17h00", rqc:"RQC 21.555/2026", name:"EE Levi Durães Peres",            addr:"Av. Coronel Luiz Maia, 1355 – Santa Lúcia, Montes Claros/MG",   director:"Eliene Ribeiro Soares" },
+  { id:"s09", day:"12/06/2026", time:"09h00", rqc:"RQC 21.550/2026", name:"EE Benício Prates",               addr:"Praça Getúlio Vargas, 1061 – Centro, Coração de Jesus/MG",       director:"Isaac Augusto Júnio" },
+  { id:"s10", day:"12/06/2026", time:"11h00", rqc:"RQC 21.551/2026", name:"EE Coronel Luís Pires de Minas",  addr:"Av. Teófilo Pires, 01 – Distrito Luís Pires de Minas, Coração de Jesus/MG", director:"Alex Sandro Feliciano da Silva" },
+  { id:"s11", day:"12/06/2026", time:"14h00", rqc:"RQC 21.549/2026", name:"EE Sant'ana",                     addr:"Rua Icaraí, 285 – Vale das Palmeiras, Brasília de Minas/MG",     director:"Nilmar Mendes Ferreira" },
+  { id:"s12", day:"12/06/2026", time:"16h00", rqc:"RQC 21.559/2026", name:"EE Professora Maria Machado",     addr:"Praça João Veloso de Aquino, S/N – São João, Mirabela/MG",       director:"Marcos André Ferreira de Oliveira" },
+];
+
+const CK = {
+  sala:   ["TV 43\"","Notebook","Persiana","Ar condicionado","Lousa interativa","Datashow/projetor"],
+  adm:    ["Notebooks","TV 43\"","Caixa de som","Impressora colorida","Ar condicionado","Arquivos/escaninhos"],
+  prof:   ["Notebooks","TV 43\"","Caixa de som","Impressora colorida","Ar condicionado","Arquivos/escaninhos","Geladeira","Micro-ondas"],
+  sec:    ["Notebooks","TV 43\"","Caixa de som","Impressora colorida","Ar condicionado","Arquivos/escaninhos","Computadores"],
+  lab:    ["Notebooks","TV 43\"","Lousa","Lousa interativa","Impressora colorida","Persiana","Tablets","Caixa de som","Arquivos/escaninhos","Ar condicionado","Datashow/projetor"],
+  multi:  ["Notebooks","TV 43\"","Impressora colorida","Persiana","Tablets","Lousa interativa","Caixa de som","Datashow/projetor","Ar condicionado"],
+  info:   ["Notebooks","TV 43\"","Lousa","Impressora colorida","Persiana","Tablets","Lousa interativa","Caixa de som","Arquivos/escaninhos","Ar condicionado"],
+  biblio: ["Notebooks","TV 43\"","Persiana","Tablets","Lousa interativa","Arquivos/escaninhos","Ar condicionado"],
+  quad:   ["Estrutura de basquete","Traves para futebol","Poste de vôlei"],
+  ban:    ["Dispenser papel toalha","Papeleira p/ papel higiênico"],
+  patio:  ["Bebedouros de pressão","Mesa de xadrez","Mesa de ping-pong","Mesa de totó","Ventilador de parede","Kit playground","Mesas de concreto"],
+  refeit: ["Dispenser papel toalha","Ventilador de parede","Saboneteiras plásticas"],
+  coz:    ["Fogão industrial","Forno industrial","Freezer industrial vertical","Refrigerador industrial","Purificador de água","Dispenser papel toalha","Microondas","Coifa industrial","Ventilador de parede"],
+  dep:    ["Lava-roupa"],
+  aud:    ["Caixa de som","Projetor de vídeo","Ar condicionado"],
+  geral:  ["Cadeiras de rodas","Balança antropométrica","Maca","Quadros de vidro para aviso"],
+};
+
+const AMBIENTES = [
+  { id:"salas",    name:"Salas de aula",                  ck:"sala",   extraFields:[{id:"n_salas",label:"Nº de salas"}] },
+  { id:"prof",     name:"Sala dos professores",           ck:"prof" },
+  { id:"dir",      name:"Sala da direção / vice",         ck:"adm" },
+  { id:"sec",      name:"Secretaria",                     ck:"sec" },
+  { id:"sup",      name:"Supervisão / coordenação",       ck:"adm" },
+  { id:"aud",      name:"Auditório / Teatro",             ck:"aud" },
+  { id:"biblio",   name:"Biblioteca",                     ck:"biblio", extraFields:[{id:"acervo",label:"Nº de volumes"},{id:"rec_acervo",label:"Recursos p/ aquisição de acervo"}] },
+  { id:"labcien",  name:"Laboratório de ciências",        ck:"lab" },
+  { id:"labfis",   name:"Laboratório de física",          ck:"lab" },
+  { id:"labinfo",  name:"Laboratório de informática",     ck:"info",   extraFields:[{id:"n_comput",label:"Nº de computadores"}] },
+  { id:"multi",    name:"Sala multimeios / vídeo / multiuso", ck:"multi" },
+  { id:"artes",    name:"Sala de artes",                  ck:null },
+  { id:"aee",      name:"Sala de recursos (AEE)",         ck:null },
+  { id:"jogos",    name:"Sala de jogos / convivência",    ck:null },
+  { id:"coz",      name:"Cozinha",                        ck:"coz" },
+  { id:"refeit",   name:"Refeitório / cantina",           ck:"refeit" },
+  { id:"ban_al",   name:"Banheiros – alunos",             ck:"ban" },
+  { id:"ban_pr",   name:"Banheiros – professores",        ck:"ban" },
+  { id:"ban_pcd",  name:"Banheiro acessível (PCD)",       ck:"ban" },
+  { id:"qcob",     name:"Quadra coberta",                 ck:"quad" },
+  { id:"qdesc",    name:"Quadra descoberta",              ck:"quad" },
+  { id:"gin",      name:"Ginásio poliesportivo",          ck:"quad" },
+  { id:"pcob",     name:"Pátio coberto",                  ck:"patio" },
+  { id:"pdesc",    name:"Pátio descoberto",               ck:"patio" },
+  { id:"estac",    name:"Estacionamento",                 ck:null },
+  { id:"dep",      name:"Depósito / almoxarifado",        ck:"dep" },
+  { id:"repro",    name:"Reprografia",                    ck:null },
+  { id:"arquivo",  name:"Arquivo",                        ck:null },
+  { id:"rampa",    name:"Rampas / acessibilidade",        ck:null },
+  { id:"geral",    name:"Equipamentos de uso geral",      ck:"geral" },
+];
+
+// ── STORAGE ───────────────────────────────────────────────────────────────────
+const STORE_KEY = "ppp_visitas_v1";
+function loadAll(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||"{}"); }catch(e){return{};} }
+function saveAll(d){ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
+function loadSchool(id){ return loadAll()[id]||{}; }
+function saveSchool(id,data){ const all=loadAll(); all[id]=data; saveAll(all); }
+
+// ── VIEWS ─────────────────────────────────────────────────────────────────────
+let currentSchool = null;
+
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(name==='list'){ renderList(); document.getElementById('topbar-title').textContent='ECT – Visitas de campo'; }
+  if(name==='stats'){ renderStats(); document.getElementById('topbar-title').textContent='Painel estatístico'; }
+  if(name==='form'){ document.getElementById('topbar-title').textContent=currentSchool?currentSchool.name:'Formulário'; }
+  window.scrollTo(0,0);
+}
+
+// ── LIST ──────────────────────────────────────────────────────────────────────
+function getProgress(id){
+  const d=loadSchool(id);
+  if(!d||Object.keys(d).length===0) return 'empty';
+  if(d._done) return 'done';
+  return 'partial';
+}
+function progressLabel(p){ return p==='done'?'Concluído':p==='partial'?'Em andamento':'Não iniciado'; }
+
+function renderList(){
+  const days=[...new Set(SCHOOLS.map(s=>s.day))];
+  let html='';
+  for(const day of days){
+    const label = day==='11/06/2026'
+      ? '11/06 – quinta-feira · Montes Claros'
+      : '12/06 – sexta-feira · Coração de Jesus / Brasília de Minas / Mirabela';
+    html+=`<div class="day-header">${label}</div>`;
+    for(const s of SCHOOLS.filter(x=>x.day===day)){
+      const prog=getProgress(s.id);
+      html+=`<div class="school-card" onclick="openForm('${s.id}')">
+        <span class="time-badge">${s.time}</span>
+        <div class="info">
+          <div class="name">${s.name}</div>
+          <div class="meta">${s.addr}</div>
+        </div>
+        <span class="badge ${prog}">${progressLabel(prog)}</span>
+      </div>`;
+    }
+  }
+  document.getElementById('school-list').innerHTML=html;
+}
+
+// ── FORM ──────────────────────────────────────────────────────────────────────
+function openForm(id){
+  currentSchool = SCHOOLS.find(s=>s.id===id);
+  renderForm(currentSchool, loadSchool(id));
+  showView('form');
+}
+
+function renderForm(s, saved){
+  const d = saved||{};
+  let html = `
+  <div class="form-header">
+    <div class="school-name">${s.name}</div>
+    <div class="school-addr">${s.addr}</div>
+    <div class="rqc-row">${s.rqc} · ${s.day} · ${s.time}</div>
+  </div>`;
+
+  // ── SECTION 1 ──
+  html += section("1. Identificação da visita", `
+    ${row2("Consultor(a) responsável","consultor","Parlamentar(es) presente(s)","parlamentar",d)}
+    ${field("Diretor(a)","diretor",d,s.director)}
+    ${row2("Vice-diretor(a) / Supervisor(a)","vice","Outros participantes","outros",d)}
+  `);
+
+  // ── SECTION 2 ──
+  html += section("2. Oferta educacional", `
+    ${row2("Nº de alunos matriculados","n_alunos","Nº de funcionários (ef./contr.)","n_func",d)}
+    <div class="field"><label>Etapas / modalidades</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px;">
+        ${["EF – Anos iniciais","EF – Anos finais","EM regular","EM integral","EPT de nível médio","EJA","Outro"]
+          .map(m=>`<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" data-key="modal_${m.replace(/\s/g,'_')}" ${(d['modal_'+m.replace(/\s/g,'_')])?'checked':''} style="accent-color:var(--primary);width:15px;height:15px;">
+            ${m}</label>`).join('')}
+      </div>
+    </div>
+    ${row2("Turnos de funcionamento","turnos","Jornada diária (EM integral)","jornada",d)}
+    ${field("Cursos técnicos / parcerias","cursos",d)}
+    ${field("Selos / reconhecimentos","selos",d)}
+    <div class="field"><label>O colegiado escolar foi informado sobre o leilão e se posicionou formalmente?</label>
+      <div class="radio-group">
+        ${["Sim – foi informado e se posicionou formalmente",
+           "Sim – foi informado, mas não se posicionou formalmente",
+           "Não foi informado"]
+          .map((opt,i)=>`<label class="radio-opt">
+            <input type="radio" name="colegiado_${s.id}" value="${i}" data-key="colegiado" ${d.colegiado==i?'checked':''}> <span>${opt}</span>
+          </label>`).join('')}
+      </div>
+    </div>
+    ${fieldTxt("Observações sobre o colegiado","colegiado_obs",d)}
+    <div class="field"><label>A escola é utilizada para atividades da comunidade fora do horário regular?</label>
+      <div class="radio-group">
+        ${["Sim","Não"].map((opt,i)=>`<label class="radio-opt">
+          <input type="radio" name="uso_ext_${s.id}" value="${i}" data-key="uso_ext" ${d.uso_ext==i?'checked':''}> <span>${opt}</span>
+        </label>`).join('')}
+      </div>
+    </div>
+    ${fieldTxt("Descrição (uso externo)","uso_ext_desc",d)}
+  `);
+
+  // ── SECTION 3 ──
+  let ambHtml = '<div class="amb-list">';
+  for(const amb of AMBIENTES){
+    const ad = (d.ambientes||{})[amb.id]||{};
+    const exists = ad.exists; // undefined|'S'|'N'
+    const isOpen = exists==='S' || exists==='N';
+    const checks = CK[amb.ck]||[];
+    ambHtml += `<div class="amb-card${isOpen?' open':''}" id="amb_${s.id}_${amb.id}">
+      <div class="amb-head" onclick="toggleAmb('${s.id}','${amb.id}')">
+        <span class="amb-name">${amb.name}</span>
+        <div class="exists-toggle" onclick="event.stopPropagation()">
+          <button class="${exists==='S'?'on-yes':''}" onclick="setExists('${s.id}','${amb.id}','S')">S</button>
+          <button class="${exists==='N'?'on-no':''}"  onclick="setExists('${s.id}','${amb.id}','N')">N</button>
+        </div>
+      </div>
+      <div class="amb-body">`;
+
+    // extra numeric fields
+    if(amb.extraFields){
+      ambHtml += '<div style="display:flex;flex-wrap:wrap;gap:10px 20px;margin-bottom:10px;">';
+      for(const ef of amb.extraFields){
+        ambHtml += `<div class="num-field">
+          <label>${ef.label}:</label>
+          <input type="text" data-amb="${amb.id}" data-extra="${ef.id}"
+            value="${(ad.extra||{})[ef.id]||''}"
+            oninput="saveAmb('${s.id}','${amb.id}',this)">
+        </div>`;
+      }
+      ambHtml += '</div>';
+    }
+
+    // checklist
+    if(checks.length){
+      ambHtml += '<div class="checklist">';
+      for(const item of checks){
+        const ck_key = item.replace(/[^a-z0-9]/gi,'_');
+        ambHtml += `<label class="ck-item">
+          <input type="checkbox" data-amb="${amb.id}" data-ck="${ck_key}"
+            ${(ad.checks||{})[ck_key]?'checked':''}
+            onchange="saveAmb('${s.id}','${amb.id}',this)">
+          <span>${item}</span>
+        </label>`;
+      }
+      ambHtml += '</div>';
+    }
+
+    // obs
+    ambHtml += `<div class="amb-obs">
+      <label>Equipamentos / observações</label>
+      <textarea data-amb="${amb.id}" data-obs="1"
+        oninput="saveAmb('${s.id}','${amb.id}',this)"
+        placeholder="Estado de conservação, data de reforma, eventuais problemas...">${ad.obs||''}</textarea>
+    </div>`;
+
+    ambHtml += '</div></div>';
+  }
+  ambHtml += '</div>';
+  html += section("3. Ambientes", ambHtml);
+
+  // ── SECTION 4 – OBRAS ──
+  const obras = d.obras || [{}];
+  let obrasHtml = `<div class="obras-list" id="obras_${s.id}">`;
+  obras.forEach((o,i)=>{ obrasHtml += obraRow(s.id,i,o); });
+  obrasHtml += `</div>
+  <button class="add-btn" onclick="addObra('${s.id}')">+ Adicionar obra</button>`;
+  html += section("4. Obras aprovadas ou em andamento", obrasHtml);
+
+  // ── SECTION 5 – MANIFESTAÇÕES ──
+  html += section("5. Manifestações sobre a PPP",
+    `<div class="field"><label>Posicionamentos de gestores, professores e alunos</label>
+    <textarea data-key="manifestacoes" rows="8"
+      oninput="saveField('${s.id}',this)"
+      placeholder="Registre opiniões favoráveis e contrárias...">${d.manifestacoes||''}</textarea>
+    </div>`);
+
+  // ── ACTIONS ──
+  html += `<div class="form-actions">
+    <button class="btn-back" onclick="showView('list')">&#8592; Escolas</button>
+    <button class="btn-primary" onclick="markDone('${s.id}')">&#10003; Marcar como concluído</button>
+  </div>`;
+
+  document.getElementById('form-content').innerHTML = html;
+
+  // bind text inputs/textareas that use data-key
+  document.querySelectorAll('#view-form [data-key]').forEach(el=>{
+    el.addEventListener('input', ()=>saveField(s.id, el));
+    el.addEventListener('change', ()=>saveField(s.id, el));
+  });
+}
+
+function obraRow(sid, idx, o){
+  const fontes = ["Caixa escolar","Emenda parlamentar","SEE"];
+  const status = ["Aprovada – recurso liberado","Aprovada – recurso não liberado","Aguardando aprovação","Em andamento"];
+  return `<div class="obra-row" id="obra_${sid}_${idx}">
+    <div class="field"><label>Descrição</label>
+      <input type="text" value="${o.desc||''}" oninput="saveObra('${sid}',${idx},'desc',this.value)" placeholder="Descreva a obra...">
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div class="field" style="flex:1;min-width:160px;"><label>Fonte</label>
+        <div class="obra-checks">${fontes.map(f=>`<label class="obra-check">
+          <input type="radio" name="obra_fonte_${sid}_${idx}" value="${f}"
+            ${o.fonte===f?'checked':''}
+            onchange="saveObra('${sid}',${idx},'fonte',this.value)">
+          <span>${f}</span></label>`).join('')}
+        </div>
+      </div>
+      <div class="field" style="flex:1;min-width:200px;"><label>Situação</label>
+        <div class="obra-checks">${status.map(st=>`<label class="obra-check">
+          <input type="radio" name="obra_status_${sid}_${idx}" value="${st}"
+            ${o.status===st?'checked':''}
+            onchange="saveObra('${sid}',${idx},'status',this.value)">
+          <span>${st}</span></label>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function section(title, body){
+  return `<div class="section">
+    <div class="section-head" onclick="this.parentElement.classList.toggle('collapsed')">
+      <span>${title}</span><span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">${body}</div>
+  </div>`;
+}
+function field(label,key,d,pre=""){
+  return `<div class="field"><label>${label}</label>
+    <input type="text" data-key="${key}" value="${(d[key]!=null?d[key]:pre)||''}" placeholder="">
+  </div>`;
+}
+function fieldTxt(label,key,d){
+  return `<div class="field"><label>${label}</label>
+    <textarea data-key="${key}" rows="2">${d[key]||''}</textarea>
+  </div>`;
+}
+function row2(l1,k1,l2,k2,d,pre1="",pre2=""){
+  return `<div class="field-row">${field(l1,k1,d,pre1)}${field(l2,k2,d,pre2)}</div>`;
+}
+
+// ── SAVE HELPERS ──────────────────────────────────────────────────────────────
+function saveField(sid, el){
+  const d = loadSchool(sid);
+  const key = el.dataset.key;
+  if(el.type==='checkbox') d[key]=el.checked;
+  else if(el.type==='radio') d[key]=el.value;
+  else d[key]=el.value;
+  saveSchool(sid,d);
+}
+
+function setExists(sid, ambId, val){
+  const d = loadSchool(sid);
+  if(!d.ambientes) d.ambientes={};
+  if(!d.ambientes[ambId]) d.ambientes[ambId]={};
+  d.ambientes[ambId].exists = val;
+  saveSchool(sid,d);
+  // update button styles
+  const card = document.getElementById(`amb_${sid}_${ambId}`);
+  if(card){
+    card.querySelector('.on-yes')?.classList.remove('on-yes');
+    card.querySelector('.on-no')?.classList.remove('on-no');
+    const btns = card.querySelectorAll('.exists-toggle button');
+    btns[0].classList.toggle('on-yes', val==='S');
+    btns[1].classList.toggle('on-no',  val==='N');
+    if(val==='S') card.classList.add('open');
+  }
+}
+
+function toggleAmb(sid, ambId){
+  const card = document.getElementById(`amb_${sid}_${ambId}`);
+  card?.classList.toggle('open');
+}
+
+function saveAmb(sid, ambId, el){
+  const d = loadSchool(sid);
+  if(!d.ambientes) d.ambientes={};
+  if(!d.ambientes[ambId]) d.ambientes[ambId]={};
+  const a = d.ambientes[ambId];
+  if(el.dataset.obs){ a.obs = el.value; }
+  else if(el.dataset.ck){
+    if(!a.checks) a.checks={};
+    a.checks[el.dataset.ck] = el.checked;
+  } else if(el.dataset.extra){
+    if(!a.extra) a.extra={};
+    a.extra[el.dataset.extra] = el.value;
+  }
+  saveSchool(sid,d);
+}
+
+function addObra(sid){
+  const d = loadSchool(sid);
+  if(!d.obras) d.obras=[{}];
+  d.obras.push({});
+  saveSchool(sid,d);
+  const idx = d.obras.length-1;
+  const container = document.getElementById(`obras_${sid}`);
+  const div = document.createElement('div');
+  div.innerHTML = obraRow(sid, idx, {});
+  container.appendChild(div.firstElementChild);
+}
+
+function saveObra(sid, idx, field, val){
+  const d = loadSchool(sid);
+  if(!d.obras) d.obras=[{}];
+  while(d.obras.length<=idx) d.obras.push({});
+  d.obras[idx][field]=val;
+  saveSchool(sid,d);
+}
+
+function markDone(sid){
+  const d = loadSchool(sid);
+  d._done = true;
+  saveSchool(sid,d);
+  toast("Formulário marcado como concluído ✓");
+  showView('list');
+}
+
+// ── EXPORT / IMPORT ───────────────────────────────────────────────────────────
+function exportData(){
+  const data = loadAll();
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `ppp_visitas_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast("Dados exportados com sucesso");
+}
+function importData(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    try{
+      const data = JSON.parse(ev.target.result);
+      saveAll(data);
+      renderList();
+      toast("Dados importados com sucesso");
+    }catch(err){ alert("Erro ao importar: arquivo inválido."); }
+  };
+  reader.readAsText(file);
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+function renderStats(){
+  const all = loadAll();
+  const filled = SCHOOLS.filter(s=>all[s.id]&&Object.keys(all[s.id]).length>0);
+  const N = filled.length;
+
+  if(N===0){
+    document.getElementById('stats-content').innerHTML =
+      '<div class="no-data">Nenhum formulário preenchido ainda.</div>';
+    return;
+  }
+
+  let html = `<p style="font-size:13px;color:var(--muted);margin-bottom:16px;">
+    ${N} de ${SCHOOLS.length} escolas com dados registrados.</p>`;
+
+  // Ambientes: presença
+  html += `<div class="stat-section"><h3>Presença de ambientes</h3><div class="stat-grid">`;
+  for(const amb of AMBIENTES){
+    let count=0;
+    for(const s of filled){
+      const ad=(all[s.id].ambientes||{})[amb.id];
+      if(ad&&ad.exists==='S') count++;
+    }
+    const pct = N>0?Math.round(count/N*100):0;
+    html += statBar(amb.name, count, N, pct);
+  }
+  html += `</div></div>`;
+
+  // Checklist items across all ambientes that have checklists
+  const ckStats = {}; // "Ambiente – Item" => count
+  for(const amb of AMBIENTES){
+    const checks = CK[amb.ck]||[];
+    for(const item of checks){
+      const key = `${amb.name} — ${item}`;
+      ckStats[key]=0;
+    }
+  }
+  for(const s of filled){
+    const ambData = all[s.id].ambientes||{};
+    for(const amb of AMBIENTES){
+      const ad = ambData[amb.id]||{};
+      if(ad.exists!=='S') continue;
+      const checks = CK[amb.ck]||[];
+      for(const item of checks){
+        const ck_key = item.replace(/[^a-z0-9]/gi,'_');
+        const fullKey = `${amb.name} — ${item}`;
+        if((ad.checks||{})[ck_key]) ckStats[fullKey]=(ckStats[fullKey]||0)+1;
+      }
+    }
+  }
+
+  // Group by ambiente
+  let prevAmb = null;
+  let openSection = false;
+  for(const [key,count] of Object.entries(ckStats)){
+    const [ambName,itemName] = key.split(' — ');
+    if(ambName!==prevAmb){
+      if(openSection) html+=`</div></div>`;
+      html+=`<div class="stat-section"><h3>${ambName} – itens verificados</h3><div class="stat-grid">`;
+      openSection=true; prevAmb=ambName;
+    }
+    // denominator: only schools where ambiente exists=S
+    const ambId = AMBIENTES.find(a=>a.name===ambName)?.id;
+    let base=0;
+    for(const s of filled){
+      if(((all[s.id].ambientes||{})[ambId]||{}).exists==='S') base++;
+    }
+    const pct = base>0?Math.round(count/base*100):0;
+    html += statBar(itemName, count, base, pct);
+  }
+  if(openSection) html+=`</div></div>`;
+
+  document.getElementById('stats-content').innerHTML=html;
+}
+
+function statBar(label, count, total, pct){
+  const w = Math.max(4, Math.round(pct*80/100));
+  return `<div class="stat-item">
+    <span class="stat-label">${label}</span>
+    <div class="stat-bar-wrap">
+      <div class="stat-bar" style="width:${w}px"></div>
+      <span class="stat-count">${count}/${total}</span>
+    </div>
+  </div>`;
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderList();
+</script>
+</body>
+</html>
