@@ -284,12 +284,13 @@ const SCHOOLS = [
 
 const CK = {
   sala:   ["TV 43\"","Notebook/PC","Persiana","Ar condicionado","Lousa interativa","Datashow/projetor"],
-  adm:    ["Notebooks/PCs","TV 43\"","Caixa de som","Impressora colorida","Ar condicionado","Arquivos/escaninhos"],
-  prof:   ["Notebooks/PCs","TV 43\"","Caixa de som","Impressora colorida","Ar condicionado","Arquivos/escaninhos","Geladeira","Micro-ondas"],
-  sec:    ["Notebooks/PCs","TV 43\"","Caixa de som","Impressora colorida","Ar condicionado","Arquivos/escaninhos","Computadores"],
-  lab:    ["Notebooks/PCs","TV 43\"","Lousa","Lousa interativa","Impressora colorida","Persiana","Tablets","Caixa de som","Arquivos/escaninhos","Ar condicionado","Datashow/projetor"],
-  multi:  ["Notebooks/PCs","TV 43\"","Impressora colorida","Persiana","Tablets","Lousa interativa","Caixa de som","Datashow/projetor","Ar condicionado"],
-  info:   ["Notebooks/PCs","TV 43\"","Lousa","Impressora colorida","Persiana","Tablets","Lousa interativa","Caixa de som","Arquivos/escaninhos","Ar condicionado"],
+  adm:    ["Notebooks/PCs","TV 43\"","Caixa de som","Impressora","Ar condicionado","Arquivos/escaninhos"],
+  dir:    ["Notebooks/PCs","TV 43\"","Caixa de som","Impressora","Ar condicionado","Arquivos/escaninhos","Sistema de videomonitoramento"],
+  prof:   ["Notebooks/PCs","TV 43\"","Caixa de som","Impressora","Ar condicionado","Arquivos/escaninhos","Geladeira","Micro-ondas"],
+  sec:    ["Notebooks/PCs","TV 43\"","Caixa de som","Impressora","Ar condicionado","Arquivos/escaninhos","Computadores"],
+  lab:    ["Notebooks/PCs","TV 43\"","Lousa","Lousa interativa","Impressora","Persiana","Tablets","Caixa de som","Arquivos/escaninhos","Ar condicionado","Datashow/projetor"],
+  multi:  ["Notebooks/PCs","TV 43\"","Impressora","Persiana","Tablets","Lousa interativa","Caixa de som","Datashow/projetor","Ar condicionado"],
+  info:   ["Notebooks/PCs","TV 43\"","Lousa","Impressora","Persiana","Tablets","Lousa interativa","Caixa de som","Arquivos/escaninhos","Ar condicionado"],
   biblio: ["Notebooks/PCs","TV 43\"","Persiana","Tablets","Lousa interativa","Arquivos/escaninhos","Ar condicionado"],
   quad:   ["Estrutura de basquete","Traves para futebol","Poste de vôlei"],
   ban:    ["Dispenser papel toalha","Papeleira p/ papel higiênico"],
@@ -304,7 +305,7 @@ const CK = {
 const AMBIENTES = [
   { id:"salas",    name:"Salas de aula",                  ck:"sala",   extraFields:[{id:"n_salas",label:"Nº de salas"}] },
   { id:"prof",     name:"Sala dos professores",           ck:"prof" },
-  { id:"dir",      name:"Sala da direção / vice",         ck:"adm" },
+  { id:"dir",      name:"Sala da direção / vice",         ck:"dir" },
   { id:"sec",      name:"Secretaria",                     ck:"sec" },
   { id:"sup",      name:"Supervisão / coordenação",       ck:"adm" },
   { id:"aud",      name:"Auditório / Teatro",             ck:"aud" },
