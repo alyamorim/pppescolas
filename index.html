@@ -545,7 +545,7 @@ function renderForm(s, saved){
   obras.forEach((o,i)=>{ obrasHtml += obraRow(s.id,i,o); });
   obrasHtml += `</div>
   <button class="add-btn" onclick="addObra('${s.id}')">+ Adicionar obra</button>`;
-  html += section("4. Obras aprovadas ou em andamento", obrasHtml);
+  html += section("4. Obras aprovadas, em andamento ou recentemente concluídas", obrasHtml);
 
   // ── SECTION 5 – MANIFESTAÇÕES ──
   html += section("5. Manifestações sobre a PPP",
@@ -581,7 +581,7 @@ function renderForm(s, saved){
 
 function obraRow(sid, idx, o){
   const fontes = ["Caixa escolar","Emenda parlamentar","SEE"];
-  const status = ["Aprovada – recurso liberado","Aprovada – recurso não liberado","Aguardando aprovação","Em andamento"];
+  const status = ["Aprovada – recurso liberado","Aprovada – recurso não liberado","Aguardando aprovação","Em andamento","Concluída recentemente"];
   return `<div class="obra-row" id="obra_${sid}_${idx}">
     <div class="field"><label>Descrição</label>
       <input type="text" value="${o.desc||''}" oninput="saveObra('${sid}',${idx},'desc',this.value)" placeholder="Descreva a obra...">
