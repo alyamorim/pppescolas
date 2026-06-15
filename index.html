@@ -518,6 +518,13 @@ function renderForm(s, saved){
   }
   ambHtml += '</div>';
 
+  // ── EXTRA AMBIENTES (custom, user-added) ──
+  const extras = d.extraAmbientes || [];
+  ambHtml += `<div id="extra_amb_${s.id}" class="amb-list" style="margin-top:10px;">`;
+  extras.forEach((ex,i)=>{ ambHtml += extraAmbRow(s.id, i, ex); });
+  ambHtml += `</div>
+  <button class="add-btn" onclick="addExtraAmb('${s.id}')">+ Adicionar ambiente não listado</button>`;
+
   // Connectivity question
   const connOpts = ["Sim, em todos os ambientes","Parcialmente","Não"];
   ambHtml += `<div class="field" style="margin-top:14px;">
@@ -691,6 +698,79 @@ function saveObra(sid, idx, field, val){
   saveSchool(sid,d);
 }
 
+// ── EXTRA AMBIENTES (custom, user-added) ─────────────────────────────────────
+function extraAmbRow(sid, idx, ex){
+  const exists = ex.exists;
+  return `<div class="amb-card${exists?' open':''}" id="extra_${sid}_${idx}">
+    <div class="amb-head">
+      <input type="text" placeholder="Nome do ambiente" value="${(ex.name||'').replace(/"/g,'&quot;')}"
+        style="flex:1;border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:13px;font-family:var(--font);background:#fff;"
+        oninput="saveExtraAmb('${sid}',${idx},'name',this.value)">
+      <div class="exists-toggle" style="margin-left:10px;">
+        <button class="${exists==='S'?'on-yes':''}" onclick="setExtraExists('${sid}',${idx},'S')">S</button>
+        <button class="${exists==='N'?'on-no':''}"  onclick="setExtraExists('${sid}',${idx},'N')">N</button>
+      </div>
+      <button onclick="removeExtraAmb('${sid}',${idx})"
+        style="margin-left:8px;border:none;background:transparent;color:var(--accent);font-size:16px;cursor:pointer;line-height:1;"
+        title="Remover ambiente">&#10005;</button>
+    </div>
+    <div class="amb-body" style="display:${exists?'block':'none'}">
+      <div class="amb-obs">
+        <label>Equipamentos / observações</label>
+        <textarea oninput="saveExtraAmb('${sid}',${idx},'obs',this.value)"
+          placeholder="Estado de conservação, data de reforma, eventuais problemas...">${ex.obs||''}</textarea>
+      </div>
+    </div>
+  </div>`;
+}
+
+function addExtraAmb(sid){
+  const d = loadSchool(sid);
+  if(!d.extraAmbientes) d.extraAmbientes=[];
+  d.extraAmbientes.push({});
+  saveSchool(sid,d);
+  const idx = d.extraAmbientes.length-1;
+  const container = document.getElementById(`extra_amb_${sid}`);
+  const div = document.createElement('div');
+  div.innerHTML = extraAmbRow(sid, idx, {});
+  container.appendChild(div.firstElementChild);
+}
+
+function saveExtraAmb(sid, idx, field, val){
+  const d = loadSchool(sid);
+  if(!d.extraAmbientes) d.extraAmbientes=[];
+  while(d.extraAmbientes.length<=idx) d.extraAmbientes.push({});
+  d.extraAmbientes[idx][field]=val;
+  saveSchool(sid,d);
+}
+
+function setExtraExists(sid, idx, val){
+  const d = loadSchool(sid);
+  if(!d.extraAmbientes) d.extraAmbientes=[];
+  while(d.extraAmbientes.length<=idx) d.extraAmbientes.push({});
+  d.extraAmbientes[idx].exists = val;
+  saveSchool(sid,d);
+  const card = document.getElementById(`extra_${sid}_${idx}`);
+  if(card){
+    const btns = card.querySelectorAll('.exists-toggle button');
+    btns[0].classList.toggle('on-yes', val==='S');
+    btns[1].classList.toggle('on-no',  val==='N');
+    card.querySelector('.amb-body').style.display = (val==='S'||val==='N') ? 'block' : 'none';
+    card.classList.toggle('open', val==='S'||val==='N');
+  }
+}
+
+function removeExtraAmb(sid, idx){
+  const ok = window.confirm("Remover este ambiente adicionado?");
+  if(!ok) return;
+  const d = loadSchool(sid);
+  if(!d.extraAmbientes) return;
+  d.extraAmbientes.splice(idx,1);
+  saveSchool(sid,d);
+  // re-render the form to fix indices
+  renderForm(currentSchool, loadSchool(sid));
+}
+
 function markDone(sid){
   const d = loadSchool(sid);
   d._done = true;
@@ -782,6 +862,16 @@ function exportExcel(){
         amb.name,
         yn(ad.exists),
         v(ad.obs)
+      ]);
+    }
+    // Extra (custom) ambientes added by the user
+    for(const ex of (d.extraAmbientes||[])){
+      if(!ex.name && ex.exists==null && !ex.obs) continue;
+      ambRows.push([
+        s.name,
+        v(ex.name) + " (adicional)",
+        yn(ex.exists),
+        v(ex.obs)
       ]);
     }
   }
