@@ -500,6 +500,19 @@ function renderForm(s, saved){
     ambHtml += '</div></div>';
   }
   ambHtml += '</div>';
+
+  // Connectivity question
+  const connOpts = ["Sim, em todos os ambientes","Parcialmente","Não"];
+  ambHtml += `<div class="field" style="margin-top:14px;">
+    <label>a) Os ambientes da escola estão adequadamente cobertos por sinal de internet (conectividade)?</label>
+    <div class="radio-group">
+      ${connOpts.map((opt,i)=>`<label class="radio-opt">
+        <input type="radio" name="conectividade_${s.id}" value="${i}" data-key="conectividade" ${d.conectividade==i?'checked':''}> <span>${opt}</span>
+      </label>`).join('')}
+    </div>
+  </div>
+  ${fieldTxt("Observações (conectividade)","conectividade_obs",d)}`;
+
   html += section("3. Ambientes", ambHtml);
 
   // ── SECTION 4 – OBRAS ──
@@ -516,6 +529,14 @@ function renderForm(s, saved){
     <textarea data-key="manifestacoes" rows="8"
       oninput="saveField('${s.id}',this)"
       placeholder="Registre opiniões favoráveis e contrárias...">${d.manifestacoes||''}</textarea>
+    </div>`);
+
+  // ── SECTION 6 – OBSERVAÇÕES GERAIS ──
+  html += section("6. Observações gerais",
+    `<div class="field"><label>Observações gerais colhidas durante a visita</label>
+    <textarea data-key="obs_gerais" rows="8"
+      oninput="saveField('${s.id}',this)"
+      placeholder="Registre quaisquer outras observações não contempladas nos itens anteriores...">${d.obs_gerais||''}</textarea>
     </div>`);
 
   // ── ACTIONS ──
@@ -691,6 +712,7 @@ function exportExcel(){
     "Não foi informado"
   ];
   const uso_ext_opts = ["Sim","Não"];
+  const conn_opts = ["Sim, em todos os ambientes","Parcialmente","Não"];
 
   // ── ABA 1: RESUMO ─────────────────────────────────────────────────────────
   const resumoHeader = [
@@ -701,6 +723,8 @@ function exportExcel(){
     ...modalidades.map(m=>"Modal.: "+m),
     "Colegiado – posicionamento","Obs. colegiado",
     "Uso externo (Escola Aberta etc.)","Desc. uso externo",
+    "Conectividade","Obs. conectividade",
+    "Observações gerais",
     "Status formulário"
   ];
   const resumoRows = [resumoHeader];
@@ -717,6 +741,9 @@ function exportExcel(){
       v(d.colegiado_obs),
       d.uso_ext!=null ? uso_ext_opts[d.uso_ext]||'' : '',
       v(d.uso_ext_desc),
+      d.conectividade!=null ? conn_opts[d.conectividade]||'' : '',
+      v(d.conectividade_obs),
+      v(d.obs_gerais),
       d._done ? 'Concluído' : Object.keys(d).length>0 ? 'Em andamento' : 'Não iniciado'
     ];
     resumoRows.push(row);
