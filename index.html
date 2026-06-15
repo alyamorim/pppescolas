@@ -419,7 +419,15 @@ function renderForm(s, saved){
             ${m}</label>`).join('')}
       </div>
     </div>
-    ${row2("Turnos de funcionamento","turnos","Jornada diária (EM integral)","jornada",d)}
+    <div class="field"><label>Turnos de funcionamento</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px;">
+        ${["Manhã","Tarde","Noite"]
+          .map(t=>`<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" data-key="turno_${t}" ${(d['turno_'+t])?'checked':''} style="accent-color:var(--primary);width:15px;height:15px;">
+            ${t}</label>`).join('')}
+      </div>
+    </div>
+    ${field("Jornada diária (EM integral)","jornada",d)}
     ${field("Cursos técnicos / parcerias","cursos",d)}
     ${field("Selos / reconhecimentos","selos",d)}
     <div class="field"><label>O colegiado escolar foi informado sobre o leilão e se posicionou formalmente?</label>
@@ -718,7 +726,7 @@ function exportExcel(){
   const resumoHeader = [
     "Escola","Endereço","RQC","Data","Horário","Diretor(a)",
     "Consultor(a)","Parlamentar(es)","Vice/Supervisor","Outros participantes",
-    "Nº alunos","Nº funcionários","Turnos","Jornada (EM integral)",
+    "Nº alunos","Nº funcionários","Turno – Manhã","Turno – Tarde","Turno – Noite","Jornada (EM integral)",
     "Cursos técnicos/parcerias","Selos/reconhecimentos",
     ...modalidades.map(m=>"Modal.: "+m),
     "Colegiado – posicionamento","Obs. colegiado",
@@ -734,7 +742,7 @@ function exportExcel(){
       s.name, s.addr, s.rqc, s.day, s.time,
       v(d.diretor||s.director),
       v(d.consultor), v(d.parlamentar), v(d.vice), v(d.outros),
-      v(d.n_alunos), v(d.n_func), v(d.turnos), v(d.jornada),
+      v(d.n_alunos), v(d.n_func), d.turno_Manhã?'Sim':'', d.turno_Tarde?'Sim':'', d.turno_Noite?'Sim':'', v(d.jornada),
       v(d.cursos), v(d.selos),
       ...modalidades.map(m=>d['modal_'+m.replace(/\s/g,'_')]?'Sim':''),
       d.colegiado!=null ? colegiado_opts[d.colegiado]||'' : '',
