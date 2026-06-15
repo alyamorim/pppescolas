@@ -410,6 +410,14 @@ function renderForm(s, saved){
 
   // ── SECTION 2 ──
   html += section("2. Oferta educacional", `
+    <div class="field"><label>Tipologia da escola na classificação do Edital</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px;">
+        ${["A","B","C","D"]
+          .map(t=>`<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+            <input type="radio" name="tipologia_${s.id}" value="${t}" data-key="tipologia" ${d.tipologia===t?'checked':''} style="accent-color:var(--primary);width:15px;height:15px;">
+            ${t}</label>`).join('')}
+      </div>
+    </div>
     ${row2("Nº de alunos matriculados","n_alunos","Nº de funcionários (ef./contr.)","n_func",d)}
     <div class="field"><label>Etapas / modalidades</label>
       <div style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px;">
@@ -724,7 +732,7 @@ function exportExcel(){
 
   // ── ABA 1: RESUMO ─────────────────────────────────────────────────────────
   const resumoHeader = [
-    "Escola","Endereço","RQC","Data","Horário","Diretor(a)",
+    "Escola","Endereço","RQC","Data","Horário","Tipologia (Edital)","Diretor(a)",
     "Consultor(a)","Parlamentar(es)","Vice/Supervisor","Outros participantes",
     "Nº alunos","Nº funcionários","Turno – Manhã","Turno – Tarde","Turno – Noite","Jornada (EM integral)",
     "Cursos técnicos/parcerias","Selos/reconhecimentos",
@@ -739,7 +747,7 @@ function exportExcel(){
   for(const s of SCHOOLS){
     const d = all[s.id]||{};
     const row = [
-      s.name, s.addr, s.rqc, s.day, s.time,
+      s.name, s.addr, s.rqc, s.day, s.time, v(d.tipologia),
       v(d.diretor||s.director),
       v(d.consultor), v(d.parlamentar), v(d.vice), v(d.outros),
       v(d.n_alunos), v(d.n_func), d.turno_Manhã?'Sim':'', d.turno_Tarde?'Sim':'', d.turno_Noite?'Sim':'', v(d.jornada),
