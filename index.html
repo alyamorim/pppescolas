@@ -1044,11 +1044,11 @@ function exportSchoolPDF(sid){
     const checks = CK[amb.ck]||[];
     let checksStr = '–';
     if(checks.length && ad.exists==='S'){
-      checksStr = checks.map(item=>{
+      const marked = checks.filter(item=>{
         const ck_key = item.replace(/[^a-z0-9]/gi,'_');
-        const on = (ad.checks||{})[ck_key];
-        return (on?'✓ ':'✗ ')+item;
-      }).join('\n');
+        return (ad.checks||{})[ck_key];
+      });
+      checksStr = marked.length ? marked.map(item=>'✓ '+item).join('\n') : '(nenhum item marcado)';
     }
     ambRows.push([amb.name, yn(ad.exists), checksStr, ad.obs||'–']);
   }
